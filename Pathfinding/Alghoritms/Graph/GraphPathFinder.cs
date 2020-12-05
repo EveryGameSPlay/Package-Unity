@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Gasanov.Extensions.Graphs;
-using Gasanov.Extensions.Linq;
+using Egsp.Extensions.Graphs;
+using Egsp.Extensions.Linq;
 using UnityEditor.SceneManagement;
 
-namespace Pathfinding.Graph
+namespace Egsp.Core.Pathfinding
 {
+    /// <summary>
+    /// Поиск пути по графу, использующий граф этого пакета.
+    /// </summary>
+    /// <typeparam name="TVertex"></typeparam>
     public sealed class GraphPathFinder<TVertex> 
         where TVertex : Vertex<TVertex>
     {

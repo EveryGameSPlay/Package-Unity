@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Gasanov.Extensions.Collections
+namespace Egsp.Extensions.Collections
 {
     public class LinkedGrid<TLinkable> : Grid<TLinkable> where TLinkable : class, IGridLinkable<TLinkable>
     {

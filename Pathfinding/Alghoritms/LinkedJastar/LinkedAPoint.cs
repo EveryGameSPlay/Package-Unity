@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using Sirenix.Utilities;
 using UnityEngine;
 
-namespace Pathfinding
+namespace Egsp.Core.Pathfinding
 {
+    /// <summary>
+    /// Точка с соседями, используемая в поиске пути LinkedJastar
+    /// </summary>
     public class LinkedAPoint
     {
         /// <param name="x">Позиция точки по X</param>

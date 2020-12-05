@@ -1,4 +1,4 @@
-﻿namespace Pathfinding
+﻿namespace Egsp.Core.Pathfinding
 {
     /// <summary>
     /// Данному типу ответа не нужен токен. 

@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
 
-namespace Gasanov.Extensions.Graphs
+namespace Egsp.Extensions.Graphs
 {
     public abstract class GraphAdapter<TVertexAdapter, TConcreteVertex > : SerializedMonoBehaviour
         where TVertexAdapter : VertexAdapter<TVertexAdapter, TConcreteVertex>

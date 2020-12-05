@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 
-namespace Gasanov.Extensions.Linq
+namespace Egsp.Extensions.Linq
 {
     public static class LinqExtensions
     {

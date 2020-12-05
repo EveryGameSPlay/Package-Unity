@@ -1,4 +1,4 @@
-﻿namespace Pathfinding
+﻿namespace Egsp.Core.Pathfinding
 {
     /// <summary>
     /// Прослойка между запросом и поиском пути.

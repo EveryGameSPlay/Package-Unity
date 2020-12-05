@@ -2,12 +2,31 @@
 using System;
 using System.Linq;
 
-using Gasanov.Extensions.Linq;
+using Egsp.Extensions.Linq;
 
-namespace Pathfinding
+namespace Egsp.Core.Pathfinding
 {
+    /// <summary>
+    /// Поиск пути по связному зубчатому массиву.
+    /// Однопоточный.
+    /// </summary>
     public class LinkedJastar
     {
+        /// <summary>
+        /// Сетка ячеек
+        /// </summary>
+        public LinkedAPoint[][] Grid { get; private set; }
+        
+        /// <summary>
+        /// Ширина сетки
+        /// </summary>
+        public int Width { get; private set; }
+        
+        /// <summary>
+        /// Высота сетки
+        /// </summary>
+        public int Height { get; private set; }
+
 
         public LinkedJastar(int width, int height)
         {
@@ -42,23 +61,6 @@ namespace Pathfinding
                 }
             }
         }
-        
-        /// <summary>
-        /// Сетка ячеек
-        /// </summary>
-        public LinkedAPoint[][] Grid { get; private set; }
-        
-        /// <summary>
-        /// Ширина сетки
-        /// </summary>
-        public int Width { get; private set; }
-        
-        /// <summary>
-        /// Высота сетки
-        /// </summary>
-        public int Height { get; private set; }
-
-
 
         /// <summary>
         /// Поиск оптимального пути

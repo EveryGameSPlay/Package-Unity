@@ -2,7 +2,7 @@
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 
-namespace Gasanov.Extensions.Graphs
+namespace Egsp.Extensions.Graphs
 {
     [Serializable]
     public class Edge<TVertex>

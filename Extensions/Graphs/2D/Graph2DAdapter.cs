@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
 
-namespace Gasanov.Extensions.Graphs
+namespace Egsp.Extensions.Graphs
 {
     public class Graph2DAdapter : GraphAdapter<Vertex2DAdapter, Vertex2D>
     {

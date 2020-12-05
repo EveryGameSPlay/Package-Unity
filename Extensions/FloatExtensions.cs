@@ -1,5 +1,5 @@
 ﻿
-namespace Gasanov.Extensions.Primitives
+namespace Egsp.Extensions.Primitives
 {
     public static class FloatExtensions
     {

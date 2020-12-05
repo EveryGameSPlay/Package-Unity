@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Pathfinding
+namespace Egsp.Core.Pathfinding
 {
     public static class PathFuncs
     {

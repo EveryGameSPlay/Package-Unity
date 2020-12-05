@@ -1,7 +1,7 @@
 ﻿using Unity.Mathematics;
 using UnityEngine;
 
-namespace Gasanov.Utils.MeshUtilities
+namespace Egsp.Utils.MeshUtilities
 {
     public static class MeshUtils
     {

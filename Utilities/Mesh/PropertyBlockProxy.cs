@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Gasanov.Utils.MeshUtilities
+namespace Egsp.Utils.MeshUtilities
 {
     public class PropertyBlockProxy
     {

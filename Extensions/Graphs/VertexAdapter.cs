@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 
-namespace Gasanov.Extensions.Graphs
+namespace Egsp.Extensions.Graphs
 {
     public abstract class VertexAdapter<TVertexAdapter, TConcreteVertex> : SerializedMonoBehaviour
         where TVertexAdapter : VertexAdapter<TVertexAdapter,TConcreteVertex>

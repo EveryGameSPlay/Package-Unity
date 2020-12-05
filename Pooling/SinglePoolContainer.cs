@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Gasanov.Core.Pooling
+namespace Egsp.Core
 {
     public class SinglePoolContainer<T> : IPoolContainer<T> where T : MonoBehaviour, IPoolObject
     {

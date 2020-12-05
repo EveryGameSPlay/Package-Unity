@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Pathfinding
+namespace Egsp.Core.Pathfinding
 {
     public class Path<TPoint> : IPath<TPoint>
     {

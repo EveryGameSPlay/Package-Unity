@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Gasanov.Extensions.Mono
+namespace Egsp.Extensions.Mono
 {
     public static class ComponentExtensions
     {

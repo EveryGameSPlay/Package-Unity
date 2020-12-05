@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Pathfinding
+namespace Egsp.Core.Pathfinding
 {
     public interface IPath<TPoint>
     {

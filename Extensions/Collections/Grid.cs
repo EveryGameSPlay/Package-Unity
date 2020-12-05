@@ -7,7 +7,7 @@ using System.Linq;
 
 using Sirenix.Serialization;
 
-namespace Gasanov.Extensions.Collections
+namespace Egsp.Extensions.Collections
 {
     public class Grid<TObject>
     {

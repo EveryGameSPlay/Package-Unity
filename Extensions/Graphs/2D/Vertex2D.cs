@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Gasanov.Extensions.Graphs
+namespace Egsp.Extensions.Graphs
 {
     public class Vertex2D : Vertex<Vertex2D>
     {

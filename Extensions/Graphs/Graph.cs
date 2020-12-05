@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Sirenix.Serialization;
 
-namespace Gasanov.Extensions.Graphs
+namespace Egsp.Extensions.Graphs
 {
 
     [Serializable]

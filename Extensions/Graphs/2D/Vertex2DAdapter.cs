@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Gasanov.Utils.MeshUtilities;
+using Egsp.Utils.MeshUtilities;
 using Sirenix.Serialization;
 using UnityEngine;
 using Gizmos = Popcron.Gizmos;
 
-namespace Gasanov.Extensions.Graphs
+namespace Egsp.Extensions.Graphs
 {
     [SelectionBase]
     public class Vertex2DAdapter : VertexAdapter<Vertex2DAdapter, Vertex2D>

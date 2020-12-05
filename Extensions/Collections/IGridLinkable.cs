@@ -1,4 +1,4 @@
-﻿namespace Gasanov.Extensions.Collections
+﻿namespace Egsp.Extensions.Collections
 {
     public interface IGridLinkable<TLinkable> where TLinkable : class
     {

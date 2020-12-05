@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gasanov.Core.Pooling
+namespace Egsp.Core
 {
     /// <summary>
     /// Пул объектов универсального типа

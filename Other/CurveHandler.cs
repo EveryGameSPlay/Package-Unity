@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Gasanov.Extensions.Curves
+namespace Egsp.Other
 {
     [Serializable]
     public class CurveHandler

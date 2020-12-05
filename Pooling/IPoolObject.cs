@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Gasanov.Core.Pooling
+namespace Egsp.Core
 {
     public interface IPoolObject
     {

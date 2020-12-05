@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Gasanov.Core.Pooling
+namespace Egsp.Core
 {
     public static class PoolManager
     {

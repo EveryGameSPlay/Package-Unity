@@ -1,4 +1,4 @@
-﻿namespace Pathfinding
+﻿namespace Egsp.Core.Pathfinding
 {
     public class LinkedPathNode
     {
