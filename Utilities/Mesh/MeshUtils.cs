@@ -1,4 +1,4 @@
-﻿using Unity.Mathematics;
+﻿
 using UnityEngine;
 
 namespace Egsp.Utils.MeshUtilities
