@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Egsp.Extensions.Graphs;
 using Egsp.Extensions.Linq;
-using UnityEditor.SceneManagement;
 
 namespace Egsp.Core.Pathfinding
 {

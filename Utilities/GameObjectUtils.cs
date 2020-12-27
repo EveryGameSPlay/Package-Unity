@@ -7,10 +7,9 @@ namespace Egsp.Utils.GameObjectUtilities
         
         public static void DestroyAllChildrens(this Transform transform)
         {
-            for (var i = 0; i < transform.childCount; i++)
+            for (var i = transform.childCount-1; i >-1 ; i--)
             {
                 SafeDestroy(transform.GetChild(i).gameObject);
-                i--;
             }
         }
         
