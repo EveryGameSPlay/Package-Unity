@@ -114,11 +114,36 @@ namespace Egsp.Extensions.Linq
         }
 
         /// <summary>
-        /// Возвращает случайный элемент
+        /// Возвращает случайный элемент.
+        /// При многочисленных выховах в один момент времени может выдавать один результат.
+        /// Про подобное поведение читайте в официальной документации System.Random.
         /// </summary>
         public static T Random<T>(this IEnumerable<T> collection)
         {
             var randomIndex = new System.Random().Next(0,collection.Count());
+
+            return collection.ElementAt(randomIndex);
+        }
+
+        private static int _seed;
+        public static T RandomBySeed<T>(this IEnumerable<T> collection)
+        {
+            if (_seed == int.MaxValue)
+                _seed = int.MinValue;
+
+            _seed++;
+            
+            var randomIndex = new System.Random(_seed).Next(0,collection.Count());
+
+            return collection.ElementAt(randomIndex);
+        }
+        
+        /// <summary>
+        /// Возвращает случайный элемент.
+        /// </summary>
+        public static T Random<T>(this IEnumerable<T> collection, int collectionCount)
+        {
+            var randomIndex = new System.Random().Next(0,collectionCount);
 
             return collection.ElementAt(randomIndex);
         }

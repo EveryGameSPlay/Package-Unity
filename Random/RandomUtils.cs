@@ -6,7 +6,7 @@ using UnityEngine;
 using Random = System.Random;
 using URandom = UnityEngine.Random;
 
-namespace Egsp.Utils.RandomUtilities
+namespace Egsp.RandomTools
 {
     /// <summary>
     /// Класс, содержащий методы для операций со случайностями
@@ -20,6 +20,7 @@ namespace Egsp.Utils.RandomUtilities
         
         /// <summary>
         /// Получение случайного элемента из списка с помощью весов.
+        /// Автоматическая сортировка по возрастанию.
         /// </summary>
         /// <param name="objects">Список объектов</param>
         /// <param name="selector">Функция определения веса объекта. Объект должен вернуть число - вес</param>
@@ -33,11 +34,30 @@ namespace Egsp.Utils.RandomUtilities
 
             // Сортировка по возрастанию
             var orderedObjects = objects.OrderBy(x => selector(x));
+
+            return SelectByWeightInternal(orderedObjects, selector);
+        }
+
+        /// <param name="objects">Список объектов</param>
+        /// <param name="selector">Функция определения веса объекта. Объект должен вернуть число - вес</param>
+        public static T SelectByWeightOrdered<T>(IEnumerable<T> orderedObjects, Func<T, float> selector)
+        {
+            // Если список пустой
+            if (orderedObjects.Count() == 0)
+            {
+                return default(T);
+            }
+            
+            return SelectByWeightInternal(orderedObjects, selector);
+        }
+
+        private static T SelectByWeightInternal<T>(IEnumerable<T> ordered, Func<T, float> selector)
+        {
             
             // Сумма всех весов
             var total = 0f;
 
-            foreach (var obj in orderedObjects)
+            foreach (var obj in ordered)
             {
                 total += selector(obj);
             }
@@ -45,7 +65,7 @@ namespace Egsp.Utils.RandomUtilities
             var top = 0f;
             var pointer = ((float) new Random().NextDouble()) * total;
             
-            foreach (var obj in orderedObjects)
+            foreach (var obj in ordered)
             {
                 // Сдвигаем верхнюю границу
                 top += selector(obj);
@@ -58,14 +78,14 @@ namespace Egsp.Utils.RandomUtilities
             if (IgnoreNotCriticalExceptions)
             {
                 // Возвращаем элемент с наибольшим весом
-                return orderedObjects.Last();
+                return ordered.Last();
             }
             else
             {
                 throw new Exception($"Случайный объект не был выбран с помощью весов " +
                                     $"{pointer} pointer; " +
                                     $"{total} total; " +
-                                    $"{selector(orderedObjects.Last())} biggest weight" +
+                                    $"{selector(ordered.Last())} biggest weight" +
                                     $" (SelectByWeight)");
             }
         }
