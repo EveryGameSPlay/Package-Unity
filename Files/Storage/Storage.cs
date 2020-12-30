@@ -8,62 +8,81 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Egsp.Files.Serializers;
+using JetBrains.Annotations;
 using Sirenix.Serialization;
 
 namespace Egsp.Files
  {
+     /// <summary>
+     /// <para>Корневая папка на разных устройствах отличается.</para>
+     /// <para>
+     /// Mobile - Application.persistentDataPath/Storage/;
+     /// PC - Application.dataPath/Storage/
+     /// </para>
+     /// </summary>
      public static class Storage
      {
-         static Storage()
-         {
-             SaveFolder = Application.dataPath + "/Storage/";
-             
-             Initialize();
-             LoadProfiles();
-         }
-         
          /// <summary>
          /// Расширение файла для сохраняемых данных
          /// </summary>
-         private const string SaveExtension = ".txt";
+         private const string DefaultExtension = ".txt";
 
          /// <summary>
          /// Папка сохраняемых данных. Оканчивается на "/"
          /// </summary>
-         private static readonly string SaveFolder;
+         private static string RootFolder;
 
          /// <summary>
          /// Глобальные данные.
          /// </summary>
+         [NotNull]
          public static DataProvider Global { get; private set; }
          
          /// <summary>
          /// Сокращение для глобальных данных.
          /// </summary>
+         [NotNull]
          public static DataProvider g => Global;
          
          /// <summary>
          /// Данные принадлежащие профилю.
          /// </summary>
+         [NotNull]
          public static DataProvider Local { get; set; }
 
          /// <summary>
          /// Сокращение для локальных данных.
          /// </summary>
+         [NotNull]
          public static DataProvider l => Local;
 
          /// <summary>
          /// Все существующие профили.
          /// </summary>
          private static List<DataProfile> _profiles;
+         
+         static Storage()
+         {
+             
+#if UNITY_ANDROID
+             RootFolder = Application.persistentDataPath + "/Storage/";
+#elif UNITY_IOS
+             RootFolder = Application.persistentDataPath + "/Storage/";
+#else 
+             RootFolder = Application.dataPath + "/Storage/";
+#endif
+             
+             Initialize();
+             LoadProfiles();
+         }
 
          private static void Initialize()
          {
              // Проверка существования папки с сохранениями
-             if (Directory.Exists(SaveFolder))
+             if (Directory.Exists(RootFolder))
              {
                  // Создание отсутствующей папки с сохранениями
-                 Directory.CreateDirectory(SaveFolder);
+                 Directory.CreateDirectory(RootFolder);
                  
              }
          }
@@ -71,7 +90,7 @@ namespace Egsp.Files
          private static void LoadProfiles()
          {
              var globalProfile = new DataProfile("Global");
-             var globalProvider = new DataProvider(globalProfile, SaveFolder, new OdinSerializer(), SaveExtension);
+             var globalProvider = new DataProvider(globalProfile, RootFolder, new OdinSerializer(), DefaultExtension);
 
              Global = globalProvider;
 
@@ -85,7 +104,7 @@ namespace Egsp.Files
              }
 
              var localProfile = _profiles[0];
-             Local = new DataProvider(localProfile, SaveFolder, new OdinSerializer(),SaveExtension);
+             Local = new DataProvider(localProfile, RootFolder, new OdinSerializer(),DefaultExtension);
          }
 
          /// <summary>
@@ -106,7 +125,7 @@ namespace Egsp.Files
              if(!_profiles.Contains(profile))
                  throw new Exception($"Profile {profile.Name} not exist in current list of profiles!");
              
-             Local = new DataProvider(profile, SaveFolder, new OdinSerializer(), SaveExtension);
+             Local = new DataProvider(profile, RootFolder, new OdinSerializer(), DefaultExtension);
          }
 
          /// <summary>

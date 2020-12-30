@@ -30,20 +30,20 @@ namespace Egsp.Files
         public DataProvider(DataProfile profile, string rootFolder, string extension = ".txt")
         {
             Profile = profile;
-            // Заменить на стандартный System.Text.Json
-            Serializer = new OdinSerializer();
+            
+            if(DataProfile.ValidateProfile(profile)==false)
+                throw new InvalidDataException();
 
             RootFolder = rootFolder + "/" + profile.Name+"/";
             Extension = extension;
+            
+            Serializer = new UnitySerializer();
         }
         
         public DataProvider(DataProfile profile, string rootFolder, ISerializer serializer, string extension = ".txt")
+            : this(profile, rootFolder, extension)
         {
-            Profile = profile;
             Serializer = serializer;
-
-            RootFolder = rootFolder + "/" + profile.Name + "/";
-            Extension = extension;
         }
         
         /// <summary>

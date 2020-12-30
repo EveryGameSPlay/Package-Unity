@@ -203,17 +203,22 @@ namespace Egsp.Utils.MeshUtilities
             return mesh;
         }
 
+        /// <summary>
+        /// Рисует линию с заданными параметрами через Graphics.DrawMesh(...).
+        /// </summary>
         public static void DrawLine(Vector3 from, Vector3 to, float width = 1f)
         {
             var lineMesh = Line(from, to, Vector3.forward, true, width);
             Graphics.DrawMesh(lineMesh,Vector3.zero,Quaternion.identity,StandardMaterial,0);
         }
 
+        /// <summary>
+        /// Рисует линию с заданными параметрами через Graphics.DrawMesh(...).
+        /// </summary>
         public static void DrawLine(Vector3 from, Vector3 to, float width, Material material)
         {
             var lineMesh = Line(from, to, Vector3.forward, true, width);
             Graphics.DrawMesh(lineMesh,Vector3.zero,Quaternion.identity,material,0);
-
         }
 
         /// <summary>
