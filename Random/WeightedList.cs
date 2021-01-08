@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Egsp.Extensions.Linq;
 using JetBrains.Annotations;
-using UnityEngine;
 
 namespace Egsp.RandomTools
 {
@@ -18,7 +17,7 @@ namespace Egsp.RandomTools
         [NotNull]
         public TItem Value { get; private set; }
 
-        public WeightedItem([ItemNotNull] TItem value, float weight)
+        public WeightedItem([NotNull] TItem value, float weight)
         {
             Value = value;
             Weight = weight;
@@ -83,13 +82,11 @@ namespace Egsp.RandomTools
             var randomPicked = source.RandomBySeed();
             randomPicked.Weight += step;
             
-            if(randomPicked == balanceItem)
-                Debug.LogWarning($"Coincidence {randomPicked.Value.ToString()}");
+            // if(randomPicked == balanceItem)
+            //     Debug.LogWarning($"Coincidence {randomPicked.Value.ToString()}");
 
             if (randomPicked.Weight > _weightedList.Maximum)
                 randomPicked.Weight = _weightedList.Maximum;
-
-            return;
         }
     }
 
@@ -102,7 +99,6 @@ namespace Egsp.RandomTools
         public void Balance(IEnumerable<WeightedItem<TItem>> source,
             WeightedItem<TItem> balanceItem, float step, int sourceCount = -1)
         {
-            return;
         }
     }
     
@@ -126,7 +122,15 @@ namespace Egsp.RandomTools
         [NotNull]
         public IEnumerable<WeightedItem<TItem>> OrderedList
         {
-            get => _cachedOrderList;
+            get
+            {
+                if (_cachedOrderList == null)
+                {
+                    CacheOrder();    
+                }
+                
+                return _cachedOrderList ?? _list;
+            }
             private set => _cachedOrderList = value;
         }
 
@@ -217,10 +221,10 @@ namespace Egsp.RandomTools
             return GetEnumerator();
         }
 
-        public void Add([NotNull]WeightedItem<TItem> item)
+        public void Add(WeightedItem<TItem> item)
         {
             if (item == null)
-                throw new NullReferenceException();
+                return;
             
             _list.Add(item);
             CacheOrder();
@@ -254,8 +258,11 @@ namespace Egsp.RandomTools
             CacheOrder();
         }
 
-        public bool Contains([NotNull]WeightedItem<TItem> item)
+        public bool Contains(WeightedItem<TItem> item)
         {
+            if (item == null)
+                return false;
+            
             return _list.Contains(item);
         }
 
