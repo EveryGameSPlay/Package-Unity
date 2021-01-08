@@ -4,6 +4,8 @@ namespace Egsp.Core.Ui
 {
     public interface IVisual<TVisual>
     {
+        bool InAnimation { get; }
+        
         void Enable();
 
         void Disable();
@@ -11,6 +13,8 @@ namespace Egsp.Core.Ui
 
     public abstract class SerializedVisual<TVisual> : SerializedMonoBehaviour, IVisual<TVisual>
     {
+        public bool InAnimation { get; private set; }
+
         public virtual void Enable()
         {
             gameObject.SetActive(true);
@@ -20,5 +24,8 @@ namespace Egsp.Core.Ui
         {
             gameObject.SetActive(false);
         }
+
+        protected void EnterAnimation() => InAnimation = true;
+        protected void ExitAnimation() => InAnimation = false;
     }
 }
