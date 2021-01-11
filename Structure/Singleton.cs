@@ -56,14 +56,14 @@ namespace Egsp.Core
         /// </summary>
         public static bool AlwaysExist
         {
-            get => alwaysExist;
+            get => _alwaysExist;
             set
             {
                 if(value == true)
                     DontDestroyOnLoad(_instance);
             }
         }
-        private static bool alwaysExist;
+        private static bool _alwaysExist;
 
         private static TSingleton _instance;
         private static GameObject _instanceGameObject;

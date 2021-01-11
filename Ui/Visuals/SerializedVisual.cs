@@ -1,16 +1,8 @@
 ﻿using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace Egsp.Core.Ui
 {
-    public interface IVisual<TVisual>
-    {
-        bool InAnimation { get; }
-        
-        void Enable();
-
-        void Disable();
-    }
-
     public abstract class SerializedVisual<TVisual> : SerializedMonoBehaviour, IVisual<TVisual>
     {
         public bool InAnimation { get; private set; }

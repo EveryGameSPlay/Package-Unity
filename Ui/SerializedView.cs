@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Egsp.Core.Ui
 {
+    [Obsolete]
     public abstract class SerializedView: SerializedMonoBehaviour, IView
     {
         [OdinSerialize][InfoBox("Канвас, который будет отключаться или включаться. Если его не будет," +

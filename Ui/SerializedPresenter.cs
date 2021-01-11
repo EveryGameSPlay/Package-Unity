@@ -4,6 +4,7 @@ using Sirenix.Serialization;
 
 namespace Egsp.Core.Ui
 {
+    [Obsolete]
     public abstract class SerializedPresenter<TView, TModel> : SerializedMonoBehaviour,
         IPresenter<TView, TModel> where TView : IView
     {
