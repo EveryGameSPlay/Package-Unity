@@ -7,6 +7,7 @@ using Sirenix.Serialization;
 
 namespace Egsp.Core
 {
+    [Obsolete("Класс не готов к использованию.")]
     public abstract class SerializedContext : SerializedMonoBehaviour, IContext
     {
         public IEventBus Bus
