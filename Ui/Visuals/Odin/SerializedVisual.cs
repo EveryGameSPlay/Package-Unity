@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Egsp.Core.Ui
 {
-    public abstract class SerializedVisual<TVisual> : SerializedMonoBehaviour, IVisual<TVisual>
+    public abstract class SerializedVisual : SerializedMonoBehaviour, IVisual
     {
         public bool InAnimation { get; private set; }
 

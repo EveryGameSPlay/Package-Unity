@@ -3,7 +3,7 @@
 namespace Egsp.Core
 {
     
-    public interface IContainer
+    public interface IContainer 
     {
         /// <summary>
         /// Создает экземпляр объекта, помещает его в контейнер и возвращает на него ссылку.

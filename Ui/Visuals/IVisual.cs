@@ -1,6 +1,6 @@
 ﻿namespace Egsp.Core.Ui
 {
-    public interface IVisual<TVisual>
+    public interface IVisual
     {
         bool InAnimation { get; }
         

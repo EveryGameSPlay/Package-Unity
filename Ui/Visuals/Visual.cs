@@ -2,7 +2,7 @@
 
 namespace Egsp.Core.Ui
 {
-    public abstract class Visual<TVisual> : MonoBehaviour, IVisual<TVisual>
+    public abstract class Visual: MonoBehaviour, IVisual
     {
         public bool InAnimation { get; private set; }
 
