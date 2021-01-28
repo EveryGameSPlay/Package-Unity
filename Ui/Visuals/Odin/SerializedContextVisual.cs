@@ -1,8 +1,4 @@
-﻿using System;
-using Game;
-using JetBrains.Annotations;
-
-namespace Egsp.Core.Ui
+﻿namespace Egsp.Core.Ui
 {
     public abstract class SerializedContextVisual: SerializedVisual, IContextVisual
     {
