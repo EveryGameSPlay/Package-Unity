@@ -1,0 +1,38 @@
+﻿using UnityEngine;
+
+namespace Egsp.Core
+{
+    public static class Physics2DExtensions
+    {
+        public static bool IsPhysicsEntity(this Collider2D collider2D, out IPhysicsEntity physicsEntity)
+        {
+            physicsEntity = collider2D.GetComponent<IPhysicsEntity>();
+
+            return physicsEntity != null;
+        }
+        
+        public static void AddForce(this Rigidbody2D rigidbody2D, Force force)
+            => AddForce(rigidbody2D, force.vector, force.mode);
+        
+        public static void AddForce (this Rigidbody2D rigidbody2D, Vector2 force, ForceMode mode = ForceMode.Force) {
+            switch (mode) {
+                case ForceMode.Force:
+                    rigidbody2D.AddForce (force);
+                    break;
+                case ForceMode.Impulse:
+                    rigidbody2D.AddForce (force / Time.fixedDeltaTime);
+                    break;
+                case ForceMode.Acceleration:
+                    rigidbody2D.AddForce (force * rigidbody2D.mass);
+                    break;
+                case ForceMode.VelocityChange:
+                    rigidbody2D.AddForce (force * rigidbody2D.mass / Time.fixedDeltaTime);
+                    break;
+            }
+        }
+     
+        public static void AddForce (this Rigidbody2D rigidbody2D, float x, float y, ForceMode mode = ForceMode.Force) {
+            rigidbody2D.AddForce (new Vector2 (x, y), mode);
+        }
+    }
+}
