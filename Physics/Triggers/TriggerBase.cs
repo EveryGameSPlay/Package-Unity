@@ -26,12 +26,32 @@ namespace Egsp.Core
 
         protected abstract void Overlap();
         
-        public virtual void OnEnter(UnityAction<Trigg> triggAction)
+        private void OnEnterInternal(GameObject enteredObject)
+        {
+            OnEnter(enteredObject);
+            onEnter?.Invoke(new Trigg(this, enteredObject));
+        }
+
+        private void OnExitInternal(GameObject exitObject)
+        {
+            OnExit(exitObject);
+            onExit?.Invoke(new Trigg(this, exitObject));
+        }
+        
+        protected virtual void OnEnter(GameObject enteredObject)
+        {
+        }
+
+        protected virtual void OnExit(GameObject exitObject)
+        {
+        }
+        
+        public virtual void EnterSubscribe(UnityAction<Trigg> triggAction)
         {
             onEnter?.AddListener(triggAction);
         }
 
-        public virtual void OnExit(UnityAction<Trigg> triggAction)
+        public virtual void ExitSubscribe(UnityAction<Trigg> triggAction)
         {
             onExit?.AddListener(triggAction);
         }
@@ -57,7 +77,7 @@ namespace Egsp.Core
             }
             
             // Объект не был обозначен, значит его нет в списке.
-            onEnter?.Invoke(new Trigg(this, toMark.gameObject));
+            OnEnterInternal(toMark);
             Marked.Add(new Mark(toMark));
         }
 
@@ -68,8 +88,6 @@ namespace Egsp.Core
                 Marked[i].marked = false;
             }
         }
-
-        protected abstract void ClearRuntimeResults();
 
         protected void ClearExitOrNull()
         {
@@ -86,10 +104,12 @@ namespace Egsp.Core
                 if(mark.marked)
                     continue;
                 
-                onExit?.Invoke(new Trigg(this, mark.gameObject));
+                OnExitInternal(mark.gameObject);
                 Marked.RemoveAt(i);
             }
         }
+        
+        protected abstract void ClearRuntimeResults();
 
         [Serializable]
         public sealed class Mark

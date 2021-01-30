@@ -4,13 +4,6 @@ namespace Egsp.Core
 {
     public static class Physics2DExtensions
     {
-        public static bool IsPhysicsEntity(this Collider2D collider2D, out IPhysicsEntity physicsEntity)
-        {
-            physicsEntity = collider2D.GetComponent<IPhysicsEntity>();
-
-            return physicsEntity != null;
-        }
-        
         public static void AddForce(this Rigidbody2D rigidbody2D, Force force)
             => AddForce(rigidbody2D, force.vector, force.mode);
         

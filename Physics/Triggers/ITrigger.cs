@@ -11,9 +11,9 @@ namespace Egsp.Core
     
     public interface ITrigger
     {
-        void OnEnter(UnityAction<Trigg> triggAction);
+        void EnterSubscribe(UnityAction<Trigg> triggAction);
 
-        void OnExit(UnityAction<Trigg> triggAction);
+        void ExitSubscribe(UnityAction<Trigg> triggAction);
 
         void Unsubscribe(UnityAction<Trigg> triggAction);
     }

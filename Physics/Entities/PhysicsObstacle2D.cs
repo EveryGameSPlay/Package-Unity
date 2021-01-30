@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Egsp.Core
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class PhysicsObstacle2D : MonoBehaviour, IPhysicsEntity
+    public class PhysicsObstacle2D : MonoBehaviour, IMonoPhysicsEntity
     {
         private const float TimeToSleep = 0.4f;
         
@@ -15,6 +15,8 @@ namespace Egsp.Core
         
         protected Rigidbody2D Rig;
         protected float timeToSleep = TimeToSleep;
+
+        public GameObject GameObject => gameObject;
         
         protected virtual void Awake()
         {
