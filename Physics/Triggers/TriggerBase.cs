@@ -9,7 +9,8 @@ namespace Egsp.Core
     public abstract class TriggerBase : MonoBehaviour, ITrigger
     {
         public const int OverlapResults = 10;
-        protected readonly Color GizmosColor = new Color(1f, 1f, 0);
+        
+        public static readonly Color GizmosColor = new Color(1f, 1f, 0);
         
         [SerializeField] private TriggerEvent onEnter = new TriggerEvent();
         [SerializeField] private TriggerEvent onExit = new TriggerEvent();
@@ -110,6 +111,10 @@ namespace Egsp.Core
         }
         
         protected abstract void ClearRuntimeResults();
+        
+        protected abstract void OnDrawGizmos();
+
+        protected abstract Color GetGizmosColor(); 
 
         [Serializable]
         public sealed class Mark

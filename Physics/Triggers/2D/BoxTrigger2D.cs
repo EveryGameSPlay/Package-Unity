@@ -10,7 +10,7 @@ namespace Egsp.Core
         
         protected override void OnDrawGizmos()
         {
-            Gizmos.color = GizmosColor;
+            Gizmos.color = GetGizmosColor();
             Gizmos.DrawWireCube(Centre, new Vector3(size,size,0.2f));
         }
 

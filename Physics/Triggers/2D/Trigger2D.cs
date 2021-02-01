@@ -22,6 +22,6 @@ namespace Egsp.Core
                 RuntimeResults[i] = null;
         }
 
-        protected abstract void OnDrawGizmos();
+        protected override Color GetGizmosColor() => GizmosColor;
     }
 }

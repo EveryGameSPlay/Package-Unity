@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Egsp.Other
 {
     [Serializable]
-    public class CurveHandler
+    public class Curve
     {
         [SerializeField] private AnimationCurve curve;
 

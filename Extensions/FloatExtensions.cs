@@ -1,4 +1,6 @@
 ﻿
+using System.Globalization;
+
 namespace Egsp.Extensions.Primitives
 {
     public static class FloatExtensions
@@ -11,14 +13,17 @@ namespace Egsp.Extensions.Primitives
         /// <returns></returns>
         public static string ToString(this float f, int digits)
         {
-            return System.Math.Round(f, digits).ToString();
+            return System.Math.Round(f, digits).ToString(CultureInfo.CurrentCulture);
         }
 
         /// <summary>
-        /// Возвращает число относительно промежутка (min--max) (0--1)
+        /// Возвращает число относительно промежутка (min--max) (от нуля до единицы)
         /// </summary>
         public static float ToNormalized(this float f, float min, float max)
         {
+            if (min >= max)
+                return 0;
+
             var normalized = (f - min) / (max - min);
 
             return normalized;
