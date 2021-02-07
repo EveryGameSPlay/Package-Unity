@@ -1,6 +1,4 @@
 ﻿using System;
-using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -13,34 +11,21 @@ namespace Egsp.Core
             
     }
     // Для лучшего упраления лучше настроить очередь вызова скриптов. Оператор должен быть первее.
-    public class CallbackSceneOperator : SerializedMonoBehaviour, ISceneOperator
+    public class CallbackSceneOperator : MonoBehaviour, ISceneOperator
     {
-        [FoldoutGroup("Without parameters")] [SerializeField]
-        private UnityEvent onActiveSceneChanged;
-        [FoldoutGroup("Without parameters")] [SerializeField]
-        private UnityEvent onAfterSceneLoaded;
-        [FoldoutGroup("Without parameters")] [SerializeField]
-        private UnityEvent onBeforeSceneUnload;
-        [FoldoutGroup("Without parameters")] [SerializeField]
-        private UnityEvent onParentSceneActive;
-        [FoldoutGroup("Without parameters")] [SerializeField]
-        private UnityEvent onParentSceneLoaded;
-        [FoldoutGroup("Without parameters")] [SerializeField]
-        private UnityEvent onParentSceneUnload;
+        [SerializeField] private UnityEvent onActiveSceneChanged;
+        [SerializeField] private UnityEvent onAfterSceneLoaded;
+        [SerializeField] private UnityEvent onBeforeSceneUnload;
+        [SerializeField] private UnityEvent onParentSceneActive;
+        [SerializeField] private UnityEvent onParentSceneLoaded;
+        [SerializeField] private UnityEvent onParentSceneUnload;
         
-       
-        [FoldoutGroup("Parameterized")]
+        
         [SerializeField] private SceneParamsEvent onActiveSceneChangedParams;
-        [FoldoutGroup("Parameterized")]
         [SerializeField] private SceneParamsEvent onAfterSceneLoadedParams;
-        [FoldoutGroup("Parameterized")]
         [SerializeField] private SceneParamsEvent onBeforeSceneUnloadParams;
-        
-        [FoldoutGroup("Parameterized")]
         [SerializeField] private SceneParamsEvent onParentSceneActiveParams;
-        [FoldoutGroup("Parameterized")]
         [SerializeField] private SceneParamsEvent onParentSceneLoadedParams;
-        [FoldoutGroup("Parameterized")]
         [SerializeField] private SceneParamsEvent onParentSceneUnloadParams;
 
         private void Awake()

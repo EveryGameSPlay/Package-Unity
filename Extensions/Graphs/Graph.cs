@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using Sirenix.Serialization;
 
 namespace Egsp.Extensions.Graphs
 {
 
-    [Serializable]
+    [Obsolete("Under construction.")][Serializable]
     public class Graph<TVertex>
         where TVertex : Vertex<TVertex>
     {
@@ -19,7 +17,6 @@ namespace Egsp.Extensions.Graphs
         /// <summary>
         /// Вершины графа.
         /// </summary>
-        [OdinSerialize]
         public List<TVertex> Vertices { get; protected set; }
         
         /// <summary>

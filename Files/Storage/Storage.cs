@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using Egsp.Files.Serializers;
 using JetBrains.Annotations;
-using Sirenix.Serialization;
 
 namespace Egsp.Files
  {
@@ -90,7 +86,7 @@ namespace Egsp.Files
          private static void LoadProfiles()
          {
              var globalProfile = new DataProfile("Global");
-             var globalProvider = new DataProvider(globalProfile, RootFolder, new OdinSerializer(), DefaultExtension);
+             var globalProvider = new DataProvider(globalProfile, RootFolder, new UnitySerializer(), DefaultExtension);
 
              Global = globalProvider;
 
@@ -104,7 +100,7 @@ namespace Egsp.Files
              }
 
              var localProfile = _profiles[0];
-             Local = new DataProvider(localProfile, RootFolder, new OdinSerializer(),DefaultExtension);
+             Local = new DataProvider(localProfile, RootFolder, new UnitySerializer(),DefaultExtension);
          }
 
          /// <summary>
@@ -125,7 +121,7 @@ namespace Egsp.Files
              if(!_profiles.Contains(profile))
                  throw new Exception($"Profile {profile.Name} not exist in current list of profiles!");
              
-             Local = new DataProvider(profile, RootFolder, new OdinSerializer(), DefaultExtension);
+             Local = new DataProvider(profile, RootFolder, new UnitySerializer(), DefaultExtension);
          }
 
          /// <summary>

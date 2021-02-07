@@ -1,11 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 using System;
-using System.Linq;
-
-using Sirenix.Serialization;
 
 namespace Egsp.Extensions.Collections
 {
@@ -26,31 +22,26 @@ namespace Egsp.Extensions.Collections
         /// </summary>
         public event Action<int, int, TObject> OnGridObjectCreated = delegate { };
         
-        [OdinSerialize]
         /// <summary>
         /// Количество ячеек по горизонтали
         /// </summary>
         public int Width { get; protected set; }
-
-        [OdinSerialize]
+        
         /// <summary>
         ///  Количество ячеек по вертикали
         /// </summary>
         public int Height { get; protected set; }
-
-        [OdinSerialize]
+        
         /// <summary>
         ///  Размер ячейки по горизонтали
         /// </summary>
         public float CellSizeHorizontal { get; set; }
-
-        [OdinSerialize]
+        
         /// <summary>
         /// Размер ячейки по вертикали
         /// </summary>
         public float CellSizeVertical { get; set; }
-
-        [OdinSerialize]
+        
         /// <summary>
         /// Массив объектов сетки
         /// </summary>

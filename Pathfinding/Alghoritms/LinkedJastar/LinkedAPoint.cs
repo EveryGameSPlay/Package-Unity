@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Sirenix.Utilities;
-using UnityEngine;
-
-namespace Egsp.Core.Pathfinding
+﻿namespace Egsp.Core.Pathfinding
 {
     /// <summary>
     /// Точка с соседями, используемая в поиске пути LinkedJastar

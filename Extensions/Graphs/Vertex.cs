@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 
 namespace Egsp.Extensions.Graphs
 {
     /// <summary>
     /// Представление вершины графа.
     /// </summary>
-    [Serializable]
+    [Obsolete("Under construction.")][Serializable]
     public abstract class Vertex<TConcreteVertex>
         where TConcreteVertex : Vertex<TConcreteVertex>
     {
@@ -25,14 +23,12 @@ namespace Egsp.Extensions.Graphs
         /// Связи с другими вершинами.
         /// Связь указывает на то, что из этой вершины можно попасть в соединенную.
         /// </summary>
-        [OdinSerialize]
         public List<TConcreteVertex> Connections { get; protected set; }
 
         
         /// <summary>
         /// Ребра выходов. Запекаются на основе соединений.
         /// </summary>
-        [ReadOnly][OdinSerialize]
         public List<Edge<TConcreteVertex>> Out { get; protected set; }
 
         /// <summary>

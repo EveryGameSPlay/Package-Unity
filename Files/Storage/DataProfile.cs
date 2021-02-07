@@ -1,5 +1,4 @@
 ﻿using System;
-using Sirenix.Utilities;
 
 namespace Egsp.Files
 {
@@ -29,7 +28,7 @@ namespace Egsp.Files
         
         private static bool ValName(string name)
         {
-            if (name.IsNullOrWhitespace())
+            if (string.IsNullOrWhiteSpace(name))
                 return false;
 
             return true;
