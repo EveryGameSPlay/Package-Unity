@@ -2,26 +2,56 @@
 using UnityEngine;
 
 using System;
+using Egsp.Core;
 
 namespace Egsp.Extensions.Collections
 {
-    public class Grid<TObject>
+    public struct CellParams
+    {
+        private static CellParams _one = new CellParams(1,1);
+        
+        public readonly float Width;
+        public readonly float Height;
+
+        public static CellParams One => _one;
+        
+        public CellParams(float width, float height)
+        {
+            Width = width;
+            Height = height;
+        }
+    }
+
+    public struct Scene
+    {
+        public readonly Vector3 Offset;
+
+        public Scene(Vector3 offset)
+        {
+            Offset = offset;
+        }
+    }
+
+    public interface IGridListener<TObject>
     {
         /// <summary>
-        /// Вызывается при изменении значения сетки. Передает два индекса и изменяемы объект
+        /// Вызывается при изменении значения сетки. Передает два индекса и изменяемы объект.
         /// </summary>
-        public event Action<int,int,TObject> OnGridObjectChanged = delegate { };
+        void OnChangeObject(int x,int y,TObject changed);
 
         /// <summary>
-        /// Вызывается при удалении объекта из сетки
+        /// Вызывается при удалении объекта из сетки.
         /// </summary>
-        public event Action<int, int, TObject> OnGridObjectDeleted = delegate { };
+        void OnRemoveObject(int x, int y,TObject removed);
 
         /// <summary>
-        /// Вызывается при создании объекта. Объект является значением default(TObject)
+        /// Вызывается при создании объекта. Объект является значением default(TObject).
         /// </summary>
-        public event Action<int, int, TObject> OnGridObjectCreated = delegate { };
-        
+        void OnCreateObject(int x, int y, TObject created);
+    }
+
+    public abstract class Grid
+    {
         /// <summary>
         /// Количество ячеек по горизонтали
         /// </summary>
@@ -31,31 +61,31 @@ namespace Egsp.Extensions.Collections
         ///  Количество ячеек по вертикали
         /// </summary>
         public int Height { get; protected set; }
-        
-        /// <summary>
-        ///  Размер ячейки по горизонтали
-        /// </summary>
-        public float CellSizeHorizontal { get; set; }
-        
-        /// <summary>
-        /// Размер ячейки по вертикали
-        /// </summary>
-        public float CellSizeVertical { get; set; }
-        
-        /// <summary>
-        /// Массив объектов сетки
-        /// </summary>
-        protected List<List<TObject>> GridList2D { get; set; }
 
         /// <summary>
         /// Количество ячеек.
         /// </summary>
         public int Count => Width * Height;
         
+        public CellParams Cell { get; protected set; } = CellParams.One;
+        
+        public Scene Scene { get; set; } = new Scene(Vector3.zero);
+
+        public abstract void WorldToIndex(Vector3 position, out int x, out int y);
+
+        public abstract bool InBounds(Vector3 position);
+
+        public abstract bool InBounds(int x, int y);
+    }
+    
+    public class Grid<TObject> : Grid
+    {
         /// <summary>
-        /// Смещение корня сетки. Можно приравнять к позиции объекта и сетка будет вычислять относительно этой позиции.
+        /// Массив объектов сетки
         /// </summary>
-        public Vector3 Offset { get; set; }
+        protected List<List<TObject>> GridList2D { get; set; }
+        
+        public TypedBus<IGridListener<TObject>> Bus { get; protected set; } = new TypedBus<IGridListener<TObject>>();
         
 
         public TObject this[int x, int y]
@@ -64,18 +94,12 @@ namespace Egsp.Extensions.Collections
             set => GridList2D[x][y] = value;
         }
 
-        protected Grid()
-        {
-            // parameterless constructor
-        }
-
-        public Grid(int width, int height, float cellSizeHorizontal = 1, float cellSizeVertical = 1)
+        public Grid(int width, int height, float cellWidth = 1, float cellHeight = 1)
         {
             this.Width = width;
             this.Height = height;
 
-            this.CellSizeHorizontal = cellSizeHorizontal;
-            this.CellSizeVertical = cellSizeVertical;
+            Cell = new CellParams(cellWidth, cellHeight);
 
             GridList2D = new List<List<TObject>>(Width);
 
@@ -104,8 +128,8 @@ namespace Egsp.Extensions.Collections
         }
 
         /// <param name="createTObject">Функция создания объекта</param>
-        public Grid(int width, int height, float cellSizeHorizontal, float cellSizeVertical, Func<TObject> createTObject)
-            : this(width, height, cellSizeHorizontal, cellSizeVertical)
+        public Grid(int width, int height, float cellWidth, float cellHeight, Func<TObject> createTObject)
+            : this(width, height, cellWidth, cellHeight)
         {
             for (int x = 0; x < width; x++)
             {
@@ -130,8 +154,8 @@ namespace Egsp.Extensions.Collections
         }
 
         /// <param name="createTObject">Функция создания объекта. Получает координаты ячейки</param>
-        public Grid(int width, int height, float cellSizeHorizontal, float cellSizeVertical, Func<int, int, TObject> createTObject)
-            : this(width, height, cellSizeHorizontal, cellSizeVertical)
+        public Grid(int width, int height, float cellWidth, float cellHeight, Func<int, int, TObject> createTObject)
+            : this(width, height, cellWidth, cellHeight)
         {
             for (int x = 0; x < width; x++)
             {
@@ -142,59 +166,22 @@ namespace Egsp.Extensions.Collections
             }
         }
 
-
-
-
-        /// <summary>
-        /// Получение позиции в мировых координатах
-        /// </summary>
-        public Vector3 GetWorldPosition(int x,int y)
-        {
-            return new Vector3(x * CellSizeHorizontal, y * CellSizeVertical) + Offset;
-        }
-
-        /// <summary>
-        /// Получение позиции центра ячейки в мировых координатах
-        /// </summary>
-        public Vector3 GetCentralizedWorldPostion(int x,int y)
-        {
-            return new Vector3(x * CellSizeHorizontal, y * CellSizeVertical) 
-                   + new Vector3(CellSizeHorizontal, CellSizeVertical) * 0.5f + Offset;
-        }
-
-        /// <summary>
-        /// Возвращает мировую позицию нижнего левого угла
-        /// </summary>
-        public Vector3 GetBottomLeftCornerPosition(int x, int y)
-        {
-            return new Vector3(x * CellSizeHorizontal, y * CellSizeVertical)+ Offset;
-        }
-
-        /// <summary>
-        /// Возвращает мировую позицию верхнего правого угла
-        /// </summary>
-        public Vector3 GetTopRightCornerPosition(int x, int y)
-        {
-            return new Vector3(x * CellSizeHorizontal, y * CellSizeVertical)
-                   + new Vector3(CellSizeHorizontal, CellSizeVertical)+ Offset;
-        }
-
         /// <summary>
         /// Получение индексов из мировой позиции. 
         /// Возвращает отрицательные числа тоже
         /// </summary>
-        public void WorldToIndex(Vector3 worldPos, out int x, out int y)
+        public override void WorldToIndex(Vector3 worldPos, out int x, out int y)
         {
-            worldPos -= Offset;
+            worldPos -= Scene.Offset;
             
-            x = Mathf.FloorToInt(worldPos.x / CellSizeHorizontal);
-            y = Mathf.FloorToInt(worldPos.y / CellSizeVertical);
+            x = Mathf.FloorToInt(worldPos.x / Cell.Width);
+            y = Mathf.FloorToInt(worldPos.y / Cell.Height);
         }
         
         /// <summary>
         /// Находятся ли индексы в пределах сетки
         /// </summary>
-        public bool InBounds(int x, int y)
+        public override bool InBounds(int x, int y)
         {
             if (x >= 0 && y >= 0 && x < Width && y < Height)
                 return true;
@@ -205,7 +192,7 @@ namespace Egsp.Extensions.Collections
         /// <summary>
         /// Находится ли мировая позиция в пределах сетки
         /// </summary>
-        public bool InBounds(Vector3 worldPos)
+        public override bool InBounds(Vector3 worldPos)
         {
             int x, y;
             WorldToIndex(worldPos,out x,out y);
@@ -292,9 +279,8 @@ namespace Egsp.Extensions.Collections
         {
             if (InBounds(x,y))
             {
-                // Debug.Log($"{x},{y} : {Width},{Height} : {GridArray.Count},{GridArray[x].Count}");
                 GridList2D[x][y] = newObject;
-                OnGridObjectChanged(x, y, newObject);
+                GridObjectChanged(x,y,newObject);
             }
         }
 
@@ -342,15 +328,6 @@ namespace Egsp.Extensions.Collections
         }
 
         /// <summary>
-        /// Вызывать при изменении объекта (ссылочный тип)
-        /// </summary>
-        /// <param name="value">Изменяемый объект</param>
-        public void GridObjectChanged(int x,int y,TObject value)
-        {
-            OnGridObjectChanged(x,y,value);
-        }
-
-        /// <summary>
         /// Изменяет размер сетки
         /// </summary>
         /// <param name="newWidth">Новая ширина</param>
@@ -380,7 +357,7 @@ namespace Egsp.Extensions.Collections
                         {
                             var lx = x;
                             var ly = y;
-                            OnGridObjectDeletedHandler(lx,ly, GridList2D[lx][ly]);
+                            OnGridObjectRemoved(lx,ly, GridList2D[lx][ly]);
                             
                             GridList2D[x].RemoveAt(y);
                         }
@@ -399,7 +376,7 @@ namespace Egsp.Extensions.Collections
                             
                             var lx = x;
                             var ly = newHeight - s;
-                            OnGridObjectCreatedHandler(lx, ly, default(TObject));
+                            OnGridObjectCreated(lx, ly, default(TObject));
                         }
                     }
                 }
@@ -420,7 +397,7 @@ namespace Egsp.Extensions.Collections
                             var lx = x;
                             var ly = y;
                             // Оповещаем об удалении
-                            OnGridObjectDeletedHandler(lx, ly, GridList2D[lx][ly]);
+                            OnGridObjectRemoved(lx, ly, GridList2D[lx][ly]);
                         }
                         // Удаляем столбец (от конца)
                         GridList2D.RemoveAt(x);
@@ -441,7 +418,7 @@ namespace Egsp.Extensions.Collections
                             
                             GridList2D[lx].Add(default(TObject));
                             // Debug.Log($"{lx}:{ly} lxly");
-                            OnGridObjectCreatedHandler(lx, ly, default(TObject));
+                            OnGridObjectCreated(lx, ly, default(TObject));
                         }
                     }
                 }
@@ -450,15 +427,24 @@ namespace Egsp.Extensions.Collections
 
             }
         }
-
-        private void OnGridObjectCreatedHandler(int x,int y,TObject createdObject)
+        
+        /// <summary>
+        /// Вызывать при изменении объекта (ссылочный тип)
+        /// </summary>
+        /// <param name="value">Изменяемый объект</param>
+        public void GridObjectChanged(int x,int y,TObject value)
         {
-            OnGridObjectCreated(x, y, createdObject);
+            Bus.Raise(l => l.OnChangeObject(x, y, value));
         }
 
-        private void OnGridObjectDeletedHandler(int x,int y,TObject deletedObject)
+        private void OnGridObjectCreated(int x,int y,TObject value)
         {
-            OnGridObjectDeleted(x, y, deletedObject);
+            Bus.Raise(l => l.OnCreateObject(x, y, value));
+        }
+
+        private void OnGridObjectRemoved(int x,int y,TObject value)
+        {
+            Bus.Raise(l => l.OnRemoveObject(x, y, value));
         }
 
         /// <summary>
@@ -475,78 +461,6 @@ namespace Egsp.Extensions.Collections
 
             return array;
         }
-        
-        
-        
-        
-        
-        
-        
-        /// <summary>
-        /// Возвращает позицию в зависимости от размерности ячеек
-        /// </summary>
-        /// <param name="position">Позиция в мировом пространстве</param>
-        public Vector3 SnapToGridDimension(Vector3 position)
-        {
-            position.x = Mathf.Floor(position.x / CellSizeHorizontal)
-                         * CellSizeHorizontal;
-            
-            position.y = Mathf.Floor(position.y / CellSizeVertical)
-                         * CellSizeVertical;
 
-            return position;
-        }
-        
-        /// <summary>
-        /// Возвращает позицию в зависимости от размерности ячеек, но центрированную
-        /// </summary>
-        public Vector3 SnapToGridDimensionCentralized(Vector3 position)
-        {
-            position.x = Mathf.Floor(position.x / CellSizeHorizontal)
-                * CellSizeHorizontal+CellSizeHorizontal*0.5f;
-            
-            position.y = Mathf.Floor(position.y / CellSizeVertical)
-                * CellSizeVertical+CellSizeVertical*0.5f;
-
-            return position;
-        }
-
-        /// <summary>
-        /// Возвращает позицию ближайшей ячейки
-        /// </summary>
-        /// <param name="position"></param>
-        /// <returns></returns>
-        public Vector3 GetNearestCellCentralized(Vector3 position)
-        {
-            position = SnapToGridDimensionCentralized(position);
-            
-            int x, y;
-            WorldToIndex(position,out x,out y);
-            
-            if (InBounds(x,y))
-                return position;
-
-            x = Mathf.Clamp(x, 0, Width-1);
-            y = Mathf.Clamp(y, 0, Height-1);
-
-            return GetCentralizedWorldPostion(x, y);
-
-        }
-        
-        public Vector3 GetNearestCellCentralized(Vector3 position,out int x,out int y)
-        {
-            position = SnapToGridDimensionCentralized(position);
-            
-            WorldToIndex(position,out x,out y);
-            
-            if (InBounds(x,y))
-                return position;
-
-            x = Mathf.Clamp(x, 0, Width-1);
-            y = Mathf.Clamp(y, 0, Height-1);
-
-            return GetCentralizedWorldPostion(x, y);
-        }
-        
     }
 }

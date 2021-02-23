@@ -5,8 +5,8 @@ namespace Egsp.Extensions.Collections
 {
     public class LinkedGrid<TLinkable> : Grid<TLinkable> where TLinkable : class, IGridLinkable<TLinkable>
     {
-        protected LinkedGrid()
-            : base ()
+        protected LinkedGrid(int width, int height)
+            : base(width, height)
         {
             
         }
@@ -73,9 +73,9 @@ namespace Egsp.Extensions.Collections
             }
         }
 
-        public LinkedGrid(int width, int height, float cellSizeHorizontal, float cellSizeVertical,
+        public LinkedGrid(int width, int height, float cellWidth, float cellHeight,
             Func<TLinkable> createTObject) 
-            : base(width, height, cellSizeHorizontal, cellSizeVertical)
+            : base(width, height, cellWidth, cellHeight)
         {
             for (var x = 0; x < Width; x++)
             {
@@ -104,9 +104,9 @@ namespace Egsp.Extensions.Collections
             }
         }
 
-        public LinkedGrid(int width, int height, float cellSizeHorizontal, float cellSizeVertical,
+        public LinkedGrid(int width, int height, float cellWidth, float cellHeight,
             Func<int, int, TLinkable> createTObject)
-            : base(width, height, cellSizeHorizontal, cellSizeVertical)
+            : base(width, height, cellWidth, cellHeight)
         {
             for (var x = 0; x < Width; x++)
             {
@@ -142,14 +142,10 @@ namespace Egsp.Extensions.Collections
         public static LinkedGrid<TLinkable> ToLinkedGrid<TLinkable>(Grid<TLinkable> grid)
             where TLinkable : class, IGridLinkable<TLinkable>
         {
-            var linkedGrid = new LinkedGrid<TLinkable>();
+            var linkedGrid = new LinkedGrid<TLinkable>(grid.Width, grid.Height);
+            
+            linkedGrid.Cell = grid.Cell;
 
-            linkedGrid.Width = grid.Width;
-            linkedGrid.Height = grid.Height;
-            
-            linkedGrid.CellSizeHorizontal = grid.CellSizeHorizontal;
-            linkedGrid.CellSizeVertical = grid.CellSizeVertical;
-            
             linkedGrid.GridList2D = new List<List<TLinkable>>(linkedGrid.Width);
             
             for (var x = 0; x < linkedGrid.Width; x++)
