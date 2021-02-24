@@ -5,14 +5,16 @@ namespace Egsp.Utils.MeshUtilities
 {
     public static class MeshUtils
     {
-        private static readonly Shader StandardShader;
-        private static readonly Material StandardMaterial;
+        private static readonly Shader SpriteDefault;
+        private static readonly Material SpriteDefaultMaterial;
         
         static MeshUtils()
         {
-            StandardShader = Shader.Find("Sprites/Default");
-            StandardMaterial = new Material(StandardShader);
+            SpriteDefault = Shader.Find("Sprites/Default");
+            SpriteDefaultMaterial = new Material(SpriteDefault);
         }
+
+        public static Material GetSpriteDefaultMaterial() => SpriteDefaultMaterial;
         
         public static Mesh CreateEmptyMesh()
         {
@@ -209,7 +211,7 @@ namespace Egsp.Utils.MeshUtilities
         public static void DrawLine(Vector3 from, Vector3 to, float width = 1f)
         {
             var lineMesh = Line(from, to, Vector3.forward, true, width);
-            Graphics.DrawMesh(lineMesh,Vector3.zero,Quaternion.identity,StandardMaterial,0);
+            Graphics.DrawMesh(lineMesh,Vector3.zero,Quaternion.identity,SpriteDefaultMaterial,0);
         }
 
         /// <summary>
@@ -233,7 +235,7 @@ namespace Egsp.Utils.MeshUtilities
             meshFilter.mesh = mesh;
 
             if (material == null)
-                material = StandardMaterial;
+                material = SpriteDefaultMaterial;
             
             var meshRenderer = gameObject.AddComponent<MeshRenderer>();
             meshRenderer.material = material;
@@ -262,7 +264,7 @@ namespace Egsp.Utils.MeshUtilities
             meshFilter.mesh = mesh;
 
             if (material == null)
-                material = StandardMaterial;
+                material = SpriteDefaultMaterial;
             
             var meshRenderer = gameObject.AddComponent<MeshRenderer>();
             
