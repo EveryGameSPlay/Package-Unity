@@ -15,7 +15,7 @@ namespace Egsp.Core
             Max = Mathf.Abs(max);
 
             if ((Max - Min) < float.Epsilon)
-                Max += 1f;
+                Max += 0.001f;
         }
     }
 }
