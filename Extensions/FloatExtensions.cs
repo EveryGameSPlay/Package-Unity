@@ -28,5 +28,15 @@ namespace Egsp.Extensions.Primitives
 
             return normalized;
         }
+
+        public static float ToNormalized(this int i, float min, float max)
+        {
+            if (min >= max)
+                return 0;
+
+            var normalized = (i - min) / (max - min);
+
+            return normalized;
+        }
     }
 }

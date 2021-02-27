@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Egsp.Extensions.Primitives;
+using UnityEngine;
 
 namespace Egsp.Core
 {
@@ -16,6 +17,17 @@ namespace Egsp.Core
 
             if ((Max - Min) < float.Epsilon)
                 Max += 1;
+        }
+
+        public float Normalize(int value)
+        {
+            if (value >= Max)
+                return 1;
+
+            if (value <= Min)
+                return 0;
+
+            return value.ToNormalized(Min, Max);
         }
     }
 }
