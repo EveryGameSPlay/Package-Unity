@@ -10,7 +10,7 @@ namespace Egsp.Core
         protected ContactFilter2D Filter2D = new ContactFilter2D();
         
         /// <summary>
-        /// Используется для функций проверки объектов.
+        /// Используется для функций проверки объектов. Временный буффер найденных объектов.
         /// </summary>
         protected Collider2D[] RuntimeResults = new Collider2D[OverlapResults];
         

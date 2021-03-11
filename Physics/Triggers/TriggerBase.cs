@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,14 +10,17 @@ namespace Egsp.Core
 {
     public abstract class TriggerBase : MonoBehaviour, ITrigger
     {
+        /// <summary>
+        /// Размер буффера результатов.
+        /// </summary>
         public const int OverlapResults = 10;
         
         public static readonly Color GizmosColor = new Color(1f, 1f, 0);
         
         [SerializeField] private TriggerEvent onEnter = new TriggerEvent();
         [SerializeField] private TriggerEvent onExit = new TriggerEvent();
-
-        protected List<Mark> Marked = new List<Mark>();
+        
+        protected LinkedList<TriggerMark> Marked = new LinkedList<TriggerMark>();
 
         protected virtual void Update()
         {
@@ -25,6 +30,9 @@ namespace Egsp.Core
             ClearExitOrNull();
         }
 
+        /// <summary>
+        /// Поиск всех объектов, входящих в триггер.
+        /// </summary>
         protected abstract void Overlap();
         
         private void OnEnterInternal(GameObject enteredObject)
@@ -47,12 +55,12 @@ namespace Egsp.Core
         {
         }
         
-        public virtual void EnterSubscribe(UnityAction<Trigg> triggAction)
+        public virtual void OnEnterSubscribe(UnityAction<Trigg> triggAction)
         {
             onEnter?.AddListener(triggAction);
         }
 
-        public virtual void ExitSubscribe(UnityAction<Trigg> triggAction)
+        public virtual void OnExitSubscribe(UnityAction<Trigg> triggAction)
         {
             onExit?.AddListener(triggAction);
         }
@@ -63,50 +71,64 @@ namespace Egsp.Core
             onExit?.RemoveListener(triggAction);
         }
 
+        /// <summary>
+        /// Помечает объект, как входящий в триггер.
+        /// </summary>
         protected void MarkObject([NotNull] GameObject toMark)
         {
-            for (var i = 0; i < Marked.Count; i++)
+            for (var node = Marked.First; node != null;)
             {
-                var mark = Marked[i];
-
+                // value - struct of Mark
                 // Если объект существует, то просто помечаем его.
-                if (mark.gameObject == toMark)
+                if (node.Value.gameObject == toMark)
                 {
-                    mark.marked = true;
+                    node.Value = node.Value.SetMark(true);
                     return;
                 }
+                node = node.Next;
             }
             
             // Объект не был обозначен, значит его нет в списке.
             OnEnterInternal(toMark);
-            Marked.Add(new Mark(toMark));
+            Marked.AddLast(new TriggerMark(toMark));
         }
 
         private void UnmarkAll()
         {
-            for (var i = Marked.Count-1; i >-1; i--)
+            for (var node = Marked.Last; node != null;)
             {
-                Marked[i].marked = false;
+                node.Value = node.Value.SetMark(false);
+                node = node.Previous;
             }
         }
 
+        /// <summary>
+        /// Очищает пометки объектов, которые вышли или более не существуют.
+        /// </summary>
         protected void ClearExitOrNull()
         {
-            for (var i = Marked.Count-1; i >-1; i--)
+            // Проходимся по связному списку в обратном порядке.
+            for (var node = Marked.Last; node != null;)
             {
-                var mark = Marked[i];
-
-                if (mark.gameObject == null)
+                if (node.Value.gameObject == null)
                 {
-                    Marked.RemoveAt(i);
+                    var previous = node.Previous;
+                    Marked.Remove(node);
+                    node = previous;
                     continue;
                 }
-                
-                if(mark.marked)
+
+                if (node.Value.marked)
+                {
+                    node = node.Previous;
                     continue;
+                }
+
+                OnExitInternal(node.Value.gameObject);
                 
-                OnExitInternal(mark.gameObject);
-                Marked.RemoveAt(i);
+                var previous2 = node.Previous;
+                Marked.Remove(node);
+                node = previous2;
             }
         }
         
@@ -116,13 +138,16 @@ namespace Egsp.Core
 
         protected abstract Color GetGizmosColor(); 
 
+        /// <summary>
+        /// Структура, которая хранит информацию о пометке объекта, входящего в триггер.
+        /// </summary>
         [Serializable]
-        public sealed class Mark
+        public struct TriggerMark
         {
             public bool marked;
             public GameObject gameObject;
 
-            public Mark(GameObject gameObject)
+            public TriggerMark(GameObject gameObject)
             {
                 marked = true;
                 this.gameObject = gameObject;
@@ -131,6 +156,12 @@ namespace Egsp.Core
             public override string ToString()
             {
                 return $"{gameObject.name} ({marked})";
+            }
+
+            public TriggerMark SetMark(bool mark)
+            {
+                marked = mark;
+                return this;
             }
         }
     }
