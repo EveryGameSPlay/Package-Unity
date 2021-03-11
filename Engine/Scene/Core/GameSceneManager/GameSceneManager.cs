@@ -16,7 +16,7 @@ namespace Egsp.Core
     /// Подписываться на данный менеджер нужно в Awake.
     /// Это необходимо для своевременного подхвата событий SceneManager!
     /// </summary>
-    public sealed class GameSceneManager : SingletonRaw<GameSceneManager>
+    public sealed partial class GameSceneManager : SingletonRaw<GameSceneManager>
     {
         [NotNull] private ILogger _logger;
         
