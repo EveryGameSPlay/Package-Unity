@@ -25,5 +25,40 @@ namespace Egsp.Extensions.Collections
 
             return source;
         }
+
+        public static LinkedList<T> Remove<T>(this LinkedList<T> source, Func<T,bool> predicate)
+        {
+            var node = source.First;
+            while (node != null)
+            {
+                var next = node.Next;
+                if (predicate(node.Value))
+                {
+                    source.Remove(node);
+                    break;
+                }
+
+                node = next;
+            }
+
+            return source;
+        }
+
+        public static LinkedList<T> RemoveAll<T>(this LinkedList<T> source, Func<T, bool> predicate)
+        {
+            var node = source.First;
+            while (node != null)
+            {
+                var next = node.Next;
+                if (predicate(node.Value))
+                {
+                    source.Remove(node);
+                }
+
+                node = next;
+            }
+
+            return source;
+        }
     }
 }
