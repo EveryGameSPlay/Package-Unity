@@ -31,5 +31,10 @@ namespace Egsp.Core
 
             return SceneExistInBuildResult.NotExist;
         }
+
+        public static Scene GetActiveScene()
+        {
+            return SceneManager.GetActiveScene();
+        }
     }
 }

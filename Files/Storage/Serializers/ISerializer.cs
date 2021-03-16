@@ -1,4 +1,6 @@
-﻿namespace Egsp.Files.Serializers
+﻿using Egsp.Core;
+
+namespace Egsp.Files.Serializers
 {
     /// <summary>
     /// Интерфейс для сериализаторов.
@@ -14,7 +16,7 @@
         /// Десериализует объект.
         /// При неудаче возвращается default(T).
         /// </summary>
-        T Deserialize<T>(byte[] serializedData);
+        Option<T> Deserialize<T>(byte[] serializedData);
         
         
     }

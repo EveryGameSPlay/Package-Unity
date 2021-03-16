@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Egsp.Core
 {
@@ -10,11 +11,11 @@ namespace Egsp.Core
         /// </summary>
         /// <param name="prefab"></param>
         /// <returns></returns>
-        TObject PutPrefab<TObject>(TObject prefab) where TObject : MonoBehaviour;
+        TObject PutPrefab<TObject>(TObject prefab) where TObject : Component;
 
         /// <summary>
         /// Помещает уже созданный экземпляр в контейнер и возвращает на него ссылку.
         /// </summary>
-        TObject Put<TObject>(TObject instance) where TObject : MonoBehaviour;
+        TObject Put<TObject>(TObject instance) where TObject : Component;
     }
 }

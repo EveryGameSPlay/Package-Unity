@@ -35,27 +35,17 @@ namespace Egsp.Files
          public static DataProvider Global { get; private set; }
          
          /// <summary>
-         /// Сокращение для глобальных данных.
-         /// </summary>
-         [NotNull]
-         public static DataProvider g => Global;
-         
-         /// <summary>
          /// Данные принадлежащие профилю.
          /// </summary>
          [NotNull]
          public static DataProvider Local { get; set; }
 
          /// <summary>
-         /// Сокращение для локальных данных.
-         /// </summary>
-         [NotNull]
-         public static DataProvider l => Local;
-
-         /// <summary>
          /// Все существующие профили.
          /// </summary>
          private static List<DataProfile> _profiles;
+
+         private static ISerializer DefaultSerializer { get; set; }
          
          static Storage()
          {
@@ -66,6 +56,12 @@ namespace Egsp.Files
              RootFolder = Application.persistentDataPath + "/Storage/";
 #else 
              RootFolder = Application.dataPath + "/Storage/";
+#endif
+
+#if ODIN_SERIALIZE
+             DefaultSerializer = new OdinSerializer();
+#else
+             DefaultSerializer = new UnitySerializer();
 #endif
              
              Initialize();
@@ -79,28 +75,50 @@ namespace Egsp.Files
              {
                  // Создание отсутствующей папки с сохранениями
                  Directory.CreateDirectory(RootFolder);
-                 
              }
          }
 
          private static void LoadProfiles()
          {
              var globalProfile = new DataProfile("Global");
-             var globalProvider = new DataProvider(globalProfile, RootFolder, new UnitySerializer(), DefaultExtension);
+             var globalProvider = new DataProvider(globalProfile, RootFolder, DefaultSerializer, DefaultExtension);
 
              Global = globalProvider;
 
-             _profiles = Global.LoadClassEntities<DataProfile>("Profiles/");
+             var profiles = Global.LoadObjects<DataProfile>("Profiles/profiles");
+
+             if (profiles.IsSome)
+             {
+                 var list = profiles.Value;
+
+                 if (list.Count == 0)
+                 {
+                     _profiles = list;
+                     Local = Global;
+                 }
+                 else
+                 {
+                     var localProfile = _profiles[0];
+                     Local = new DataProvider(localProfile, RootFolder, DefaultSerializer, DefaultExtension);
+                 }
+             }
+             else
+             {
+                 _profiles = null;
+             }
              
              // Если локальный профиль не найден, то он будет ссылаться на глобальный профиль
-             if (_profiles.Count == 0)
+             if (!profiles.IsSome || profiles.Value.Count == 0)
              {
+                 _profiles = profiles.Value;
                  Local = Global;
-                 return;
              }
-
-             var localProfile = _profiles[0];
-             Local = new DataProvider(localProfile, RootFolder, new UnitySerializer(),DefaultExtension);
+             else
+             {
+                 _profiles = profiles.Value;
+                 var localProfile = _profiles[0];
+                 Local = new DataProvider(localProfile, RootFolder, DefaultSerializer, DefaultExtension);
+             }
          }
 
          /// <summary>
@@ -130,7 +148,7 @@ namespace Egsp.Files
          /// <returns></returns>
          public static PropertyFileProxy GetLocalProfileInfo()
          {
-             var proxy = Local.GetProxy("info");
+             var proxy = Local.GetPropertiesFromFile("info");
              return proxy;
          }
          

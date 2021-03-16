@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Egsp.Core;
 using UnityEngine;
 
 namespace Egsp.Files.Serializers
@@ -12,10 +13,9 @@ namespace Egsp.Files.Serializers
             return Encoding.UTF8.GetBytes(data);
         }
 
-        public T Deserialize<T>(byte[] serializedData)
+        public Option<T> Deserialize<T>(byte[] serializedData)
         {
-            var obj = JsonUtility.FromJson<T>(Encoding.UTF8.GetString(serializedData));
-            
+            var obj = JsonUtility.FromJson<T>(Encoding.UTF8.GetString(serializedData)); ;
             return obj;
         }
     }

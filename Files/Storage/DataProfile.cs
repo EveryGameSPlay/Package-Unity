@@ -3,30 +3,30 @@
 namespace Egsp.Files
 {
     [Serializable]
-    public sealed class DataProfile
+    public struct DataProfile
     {
-        public DataProfile(string name)
-        {
-            Name = name;
-        }
-        
         /// <summary>
         /// Имя профиля.
         /// </summary>
         public readonly string Name;
+        
+        public DataProfile(string name)
+        {
+            Name = name;
+        }
 
         /// <summary>
         /// Проверяет профиль на корректность.
         /// </summary>
         public static bool ValidateProfile(DataProfile dataProfile)
         {
-            if (ValName(dataProfile.Name) == false)
+            if (ValidateName(dataProfile.Name) == false)
                 return false;
 
             return true;
         }
         
-        private static bool ValName(string name)
+        public static bool ValidateName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return false;

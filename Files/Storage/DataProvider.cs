@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Egsp.Core;
 using Egsp.Files.Serializers;
 
 namespace Egsp.Files
@@ -13,11 +15,6 @@ namespace Egsp.Files
         public readonly DataProfile Profile;
 
         /// <summary>
-        /// Сериализатор, используемый провайдером.
-        /// </summary>
-        public readonly ISerializer Serializer;
-        
-        /// <summary>
         /// Корневая папка, куда сохраняются все файлы.
         /// </summary>
         public readonly string RootFolder;
@@ -26,6 +23,11 @@ namespace Egsp.Files
         /// Расширения сохраняемых файлов.
         /// </summary>
         public readonly string Extension;
+        
+        /// <summary>
+        /// Сериализатор, используемый провайдером.
+        /// </summary>
+        public ISerializer Serializer { get; set; }
 
         public DataProvider(DataProfile profile, string rootFolder, string extension = ".txt")
         {
@@ -50,23 +52,21 @@ namespace Egsp.Files
         /// Возвращает прокси для файла со свойствами.
         /// При отсутствии файла создает новый, если createDefault == true.
         /// </summary>
-        public PropertyFileProxy GetProxy(string filePath, bool createDefault = true)
+        public PropertyFileProxy GetPropertiesFromFile(string filePath, bool createDefault = true)
         {
             var path = RootFolder + filePath + Extension;
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            Directory.CreateDirectory(Path.GetDirectoryName(path) ?? throw new InvalidOperationException());
 
             if (File.Exists(path))
             {
-                var fs = File.Open(path,
-                    FileMode.Open, FileAccess.ReadWrite);
+                var fs = File.Open(path, FileMode.Open, FileAccess.ReadWrite);
 
                 return new PropertyFileProxy(fs);
             }
 
             if (createDefault)
             {
-                var fs = new FileStream(path, FileMode.Create,
-                    FileAccess.ReadWrite);
+                var fs = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
 
                 return new PropertyFileProxy(fs);
             }
@@ -77,10 +77,10 @@ namespace Egsp.Files
         /// <summary>
         /// Сохраняет любую сущность с помощью сериализации.
         /// </summary>
-        public void SaveEntity<T>(T entity, string filePath)
+        public void SaveObject<T>(T entity, string file)
         {
-            var path = CombineFilePath(filePath);
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            var path = CombineFilePath(file);
+            Directory.CreateDirectory(Path.GetDirectoryName(path) ?? throw new InvalidOperationException());
             
             var data = Serializer.Serialize(entity);
 
@@ -95,9 +95,9 @@ namespace Egsp.Files
         /// <summary>
         /// Загружает любую сущность с помощью десериализации.
         /// </summary>
-        public T LoadEntity<T>(string filePath)
+        public T LoadObject<T>(string file)
         {
-            var path = CombineFilePath(filePath);
+            var path = CombineFilePath(file);
 
             if (!File.Exists(path))
                 return default(T);
@@ -106,102 +106,51 @@ namespace Egsp.Files
 
             var entity = Serializer.Deserialize<T>(data);
 
-            return entity;
+            return entity.Value;
         }
 
-        public void SaveEntities<T>(string directoryPath, List<T> entities)
+        public void SaveObjects<T>(string file, IEnumerable<T> entities)
         {
-            var path = CombineDirectoryPath(directoryPath);
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            var path = CombineFilePath(file);
+            Directory.CreateDirectory(Path.GetDirectoryName(path) ?? throw new InvalidOperationException());
             
-            var directoryInfo = new DirectoryInfo(path);
-            foreach (var fileInfo in directoryInfo.GetFiles()
-                .Where(fileInfoValue => fileInfoValue.Extension == Extension))
-            {
-                fileInfo.Delete();
-            }
-            
-            for (var i = 0; i < entities.Count; i++)
-            {
-                var data = Serializer.Serialize(entities[i]);
-                
-                var fs = File.OpenWrite(path + $"{typeof(T).Name}_{i}" + Extension);
-                var bw = new BinaryWriter(fs);
-                bw.Write(data);
-                
-                fs.Close();
-            }
+            var fs = new FileStream(path, FileMode.Create, FileAccess.Write);
+            var binaryWriter = new BinaryWriter(fs);
+
+            var data = Serializer.Serialize(entities.ToList());
+            binaryWriter.Write(data);
+
+            fs.Close();
         }
 
         /// <summary>
         /// Загружает все сущности и игнорирует несериализованные значения.
         /// </summary>
-        public List<T> LoadStructEntities<T>(string directoryPath, bool ignoreDefault = true)
-            where T : struct
+        public Option<List<T>> LoadObjects<T>(string file)
         {
-            var path = CombineDirectoryPath(directoryPath);
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
-            var directoryInfo = new DirectoryInfo(path);
+            var path = CombineFilePath(file);
+            if (!File.Exists(path))
+                return new List<T>();
+
+            var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Read);
+            var sr = new BinaryReader(fs);
+
+            var list = Serializer.Deserialize<List<T>>(sr.ReadBytes(int.MaxValue));
+            if(list.Value == null)
+                list = Option<List<T>>.None;
             
-            var list = new List<T>();
-
-            var defaultEntity = default(T);
-            
-            foreach (var file in directoryInfo.GetFiles())
-            {
-                var data = File.ReadAllBytes(file.FullName);
-                var entity = Serializer.Deserialize<T>(data);
-                
-                // Игнорирование стандартных значений. Для классов null
-                if (ignoreDefault)
-                {
-                    if (!object.Equals(entity, defaultEntity))
-                        list.Add(entity);
-                }
-                else
-                {
-                    list.Add(entity);
-                }
-            }
-
-            return list;
-        }
-        
-        /// <summary>
-        /// Загружает все сущности и игнорирует несериализованные значения.
-        /// </summary>
-        public List<T> LoadClassEntities<T>(string directoryPath)
-            where T : class
-        {
-            var path = CombineDirectoryPath(directoryPath);
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
-            var directoryInfo = new DirectoryInfo(path);
-            
-            var list = new List<T>();
-
-            var defaultEntity = default(T);
-            
-            foreach (var file in directoryInfo.GetFiles()
-                .Where(fileInfoValue => fileInfoValue.Extension == Extension))
-            {
-                var data = File.ReadAllBytes(file.FullName);
-                var entity = Serializer.Deserialize<T>(data);
-
-                if (entity != null)
-                    list.Add(entity);
-            }
-
+            fs.Close();
             return list;
         }
 
-        public string CombineFilePath(string filePath)
+        public string CombineFilePath(string file)
         {
-            return RootFolder + filePath + Extension;
+            return RootFolder + file + Extension;
         }
 
-        public string CombineDirectoryPath(string directoryPath)
+        public string CombineDirectoryPath(string directory)
         {
-            return RootFolder + directoryPath;
+            return RootFolder + directory;
         }
     }
 }
