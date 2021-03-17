@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Egsp.Core
+﻿namespace Egsp.Core
 {
     /// <summary>
     /// Пул объектов универсального типа

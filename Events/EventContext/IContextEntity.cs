@@ -1,5 +1,4 @@
-﻿using Egsp.Core;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 namespace Egsp.Core
 {

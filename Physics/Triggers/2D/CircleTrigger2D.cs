@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Egsp.Core
 {
