@@ -17,5 +17,9 @@ namespace Egsp.Core
         /// Помещает уже созданный экземпляр в контейнер и возвращает на него ссылку.
         /// </summary>
         TObject Put<TObject>(TObject instance) where TObject : Component;
+
+        void Clear();
+
+        void DestroyLast();
     }
 }

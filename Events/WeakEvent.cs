@@ -1,16 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Egsp.Extensions.Collections;
+using UnityEngine;
 
 namespace Egsp.Core
 {
-    public sealed class WeakEvent<TValue> where TValue : class
+    /// <summary>
+    /// Структура хранит слабую ссылку на родителя делегата (Target).
+    /// Сам же делегат просто присваивается полю.
+    /// </summary>
+    public struct WeakDelegateHandle<TValue>
     {
-        public delegate void Del(TValue value);
+        /// <summary>
+        /// Объект, на который ссылается делегат.
+        /// </summary>
+        public WeakReference<object> DelTarget;
+        
+        /// <summary>
+        /// Переданный делегат.
+        /// </summary>
+        private Action<TValue> _del;
 
-        private LinkedList<WeakReference<Del>> _subscribers;
+        public bool Empty
+        {
+            get
+            {
+                object target;
+                return !DelTarget.TryGetTarget(out target);
+            }
+        }
 
-        private WeakReference<TValue> _cachedValue;
+        public WeakDelegateHandle(Action<TValue> del)
+        {
+            DelTarget = new WeakReference<object>(del.Target);
+            _del = del;
+        }
+
+        public void Raise(TValue value)
+        {
+            object target;
+            if (DelTarget.TryGetTarget(out target))
+            {
+                _del.Invoke(value);
+            }
+            else
+            {
+                _del = null;
+            }
+        }
+    }
+    
+    public sealed class WeakEvent<TValue>
+    {
+        private LinkedList<WeakDelegateHandle<TValue>> _subscribers;
+
+        private Option<TValue> _cachedValue;
 
         /// <summary>
         /// Нужно ли вызывать событие у подписчиков, которые подписались, но могли сделать это позднее.
@@ -19,70 +64,50 @@ namespace Egsp.Core
 
         public WeakEvent()
         {
-            _subscribers = new LinkedList<WeakReference<Del>>();
+            _subscribers = new LinkedList<WeakDelegateHandle<TValue>>();
         }
 
-        public void Subscribe(Del del)
+        public void Subscribe(Action<TValue> del)
         {
             if (del == null)
                 return;
 
-            _subscribers.AddLast(new WeakReference<Del>(del));
+            _subscribers.AddLast(new WeakDelegateHandle<TValue>(del));
 
-            if (_cachedValue != null && RaiseLateSubscribers)
+            if (_cachedValue.IsSome && RaiseLateSubscribers)
             {
-                TValue target;
-                if(_cachedValue.TryGetTarget(out target))
-                    del.Invoke(target);
+                del.Invoke(_cachedValue.Value);
             }
         }
 
-        public void Unsubscribe(Del del)
+        public void Unsubscribe(Action<TValue> del)
         {
             if (del == null)
                 return;
 
-            _subscribers.Remove(x =>
-            {
-                Del target;
-                if (x.TryGetTarget(out target) && target == del)
-                    return true;
-
-                return false;
-            });
+            _subscribers.Remove(x => x.Empty);
         }
 
         public void Raise(TValue value)
         {
-            foreach (var weakReference in _subscribers)
+            foreach (var weakDelegateHandle in _subscribers)
             {
-                Del target;
-                if(weakReference.TryGetTarget(out target) == false)
-                    continue;
-
-                target(value);
+                weakDelegateHandle.Raise(value);
             }
-            
+
             ClearNull();
 
-            _cachedValue = new WeakReference<TValue>(value);
+            _cachedValue = value;
         }
 
         private void ClearNull()
         {
-            _subscribers.RemoveAll(x =>
-            {
-                Del target;
-                if (x.TryGetTarget(out target) == false)
-                    return true;
-
-                return false;
-            });
+            _subscribers.RemoveAll(x => x.Empty);
         }
 
         public void ClearCachedValue()
         {
-            _cachedValue = null;
+            _cachedValue = Option<TValue>.None;
         }
     }
 }
