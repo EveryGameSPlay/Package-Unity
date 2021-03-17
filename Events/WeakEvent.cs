@@ -12,35 +12,87 @@ namespace Egsp.Core
     /// </summary>
     public struct WeakDelegateHandle<TValue>
     {
+        // Есть предположение, что при ссылке делегатом на несколько методов,
+        // данное событие будет вести себя некорректно.
+        // Это в случае, если один из целевых объектов (getinvocationlist targets) отвалится.
+
+        /// <summary>
+        /// Целевой объект делегата. Данная структура нужна для объединения логики instance и static Target.
+        /// </summary>
+        private struct DelegateTarget
+        {
+            private static DelegateTarget _staticTarget = new DelegateTarget(true);
+            /// <summary>
+            /// Ссылка на экземпляр статичной цели.
+            /// </summary>
+            private static ref DelegateTarget StaticTarget => ref _staticTarget;
+            
+            /// <summary>
+            /// Объект, на который ссылается делегат.
+            /// </summary>
+            private WeakReference<object> _target;
+            
+            private bool _isStaticTarget;
+
+            /// <summary>
+            /// Можно передать и делегат со статичной целью, конструктор сам проверит на отсутствие Target.
+            /// </summary>
+            public DelegateTarget(Action<TValue> del)
+            {
+                var delTarget = del.Target;
+                if (del.Target == null)
+                {
+                    _isStaticTarget = true;
+                    _target = null;
+                }
+                else
+                {
+                    _target = new WeakReference<object>(del.Target);
+                    _isStaticTarget = false;
+                }
+            }
+
+            public DelegateTarget(bool staticTarget)
+            {
+                _isStaticTarget = true;
+                _target = null;
+            }
+
+            /// <summary>
+            /// Статичная цель всегда будет считаться полной.
+            /// </summary>
+            public bool IsEmpty()
+            {
+                if (_isStaticTarget)
+                    return false;
+
+                object target;
+                return !(_target?.TryGetTarget(out target) ?? true);
+            }
+        }
+        
         /// <summary>
         /// Объект, на который ссылается делегат.
         /// </summary>
-        public WeakReference<object> DelTarget;
+        private DelegateTarget _delTarget;
         
         /// <summary>
         /// Переданный делегат.
         /// </summary>
         private Action<TValue> _del;
 
-        public bool Empty
-        {
-            get
-            {
-                object target;
-                return !DelTarget.TryGetTarget(out target);
-            }
-        }
+        public bool Empty => _delTarget.IsEmpty();
 
         public WeakDelegateHandle(Action<TValue> del)
         {
-            DelTarget = new WeakReference<object>(del.Target);
+            _delTarget = new DelegateTarget(del);
             _del = del;
         }
 
         public void Raise(TValue value)
         {
             object target;
-            if (DelTarget.TryGetTarget(out target))
+            if (!_delTarget.IsEmpty())
             {
                 _del.Invoke(value);
             }
