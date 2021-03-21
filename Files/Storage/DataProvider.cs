@@ -81,7 +81,12 @@ namespace Egsp.Files
         {
             var path = CombineFilePath(file);
             Directory.CreateDirectory(Path.GetDirectoryName(path) ?? throw new InvalidOperationException());
-            
+
+            SaveObjectInternal(entity, path);
+        }
+
+        private void SaveObjectInternal<T>(T entity, string path)
+        {
             var data = Serializer.Serialize(entity);
 
             // Перезапись старого файла.
@@ -141,6 +146,48 @@ namespace Egsp.Files
             
             fs.Close();
             return list;
+        }
+
+        public void SaveObjectsByFiles<T>(string directory, IEnumerable<T> entities, Func<T, string> fileName,
+            string fileExtension = null)
+        {
+            if (string.IsNullOrWhiteSpace(fileExtension))
+                fileExtension = Extension;
+            
+            var directoryPath = CombineDirectoryPath(directory);
+            Directory.CreateDirectory(directoryPath ?? throw new InvalidOperationException());
+
+            var dpForFile = directoryPath + "/";
+            
+            foreach (var entity in entities)
+            {
+                var path = dpForFile + fileName(entity) + fileExtension;
+                SaveObjectInternal(entity, path);
+            }
+        }
+
+        public LinkedList<T> LoadObjectsFromDirectory<T>(string directory, string fileFilter = "*.txt")
+        {
+            var directoryPath = CombineDirectoryPath(directory);
+            Directory.CreateDirectory(directoryPath ?? throw new InvalidOperationException());
+
+            var files = Directory.EnumerateFiles(directoryPath, fileFilter,
+                SearchOption.TopDirectoryOnly);
+
+            var linkedList = new LinkedList<T>();
+                       
+            foreach (var file in files)
+            {
+                var bytes = File.ReadAllBytes(file);
+                var obj = Serializer.Deserialize<T>(bytes);
+                
+                if(!obj.IsSome || obj.Value == null)
+                    continue;
+
+                linkedList.AddLast(obj.Value);
+            }
+
+            return linkedList;
         }
 
         public string CombineFilePath(string file)

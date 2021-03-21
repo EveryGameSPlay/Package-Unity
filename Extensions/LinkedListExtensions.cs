@@ -60,5 +60,17 @@ namespace Egsp.Extensions.Collections
 
             return source;
         }
+
+        public static LinkedList<T> ToLinkedList<T>(this List<T> list)
+        {
+            var linkedList = new LinkedList<T>();
+
+            for (var i = 0; i < list.Count; i++)
+            {
+                linkedList.AddLast(list[i]);
+            }
+
+            return linkedList;
+        }
     }
 }
