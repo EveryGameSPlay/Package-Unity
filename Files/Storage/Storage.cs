@@ -45,7 +45,7 @@ namespace Egsp.Files
          /// </summary>
          private static List<DataProfile> _profiles;
 
-         private static ISerializer DefaultSerializer { get; set; }
+         public static ISerializer DefaultSerializer { get; private set; }
          
          static Storage()
          {
