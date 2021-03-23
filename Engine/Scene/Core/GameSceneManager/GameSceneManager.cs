@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Egsp.Other;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -32,22 +33,33 @@ namespace Egsp.Core
             _sceneActivateAssistant = new SceneActivateAssistant(Bus, this, _logger);
         }
 
-        /// <summary>
-        /// Запускает загрузку сцены в additive режиме. 
-        /// </summary>
-        public void LoadSceneAdditive(string sceneName, bool activateOnLoad)
+        public void LoadScene(string sceneName, LoadSceneMode mode = LoadSceneMode.Single)
         {
-            LoadSceneAdditive(sceneName, activateOnLoad, null, null);
+            if (mode == LoadSceneMode.Single)
+                LoadSceneSingle(sceneName, true);
+            else
+                LoadSceneAdditive(sceneName, true);
         }
 
         /// <summary>
         /// Запускает загрузку сцены в additive режиме и с параметрами.
         /// </summary>
-        public void LoadSceneAdditive(string sceneName, bool activateOnLoad,[CanBeNull] SceneParams loadParams,
+        public void LoadSceneAdditive(string sceneName, bool activateOnLoad,[CanBeNull] SceneParams loadParams = null,
             [CanBeNull] SceneParams activateParams = null)
         {
-            if (Application.CanStreamedLevelBeLoaded(sceneName) == false)
-                return;
+            switch (SceneExistInBuild(sceneName))
+            {
+                case SceneExistInBuildResult.Exist:
+                    break;
+                case SceneExistInBuildResult.NotExist:
+                    _logger.Log($"Scene: {sceneName} - doesnt exist in build.");
+                    return;
+                case SceneExistInBuildResult.IncorrectName:
+                    _logger.Log("Incorrect scene name");
+                    return;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             
             var loadRequest = new SceneLoadRequest(sceneName, activateOnLoad, loadParams,activateParams);
             loadRequest.Mode = LoadSceneMode.Additive;
@@ -61,11 +73,22 @@ namespace Egsp.Core
         }
 
         // При загрузке в режиме одиночной сцены, событие активации сработает первее чем событие загрузки.
-        public void LoadSceneSingle(string sceneName, bool activateOnLoad, [CanBeNull] SceneParams loadParams,
+        public void LoadSceneSingle(string sceneName, bool activateOnLoad, [CanBeNull] SceneParams loadParams = null,
             [CanBeNull] SceneParams activateParams = null)
         {
-            if (Application.CanStreamedLevelBeLoaded(sceneName) == false)
-                return;
+            switch (SceneExistInBuild(sceneName))
+            {
+                case SceneExistInBuildResult.Exist:
+                    break;
+                case SceneExistInBuildResult.NotExist:
+                    _logger.Log($"Scene: {sceneName} - doesnt exist in build.");
+                    return;
+                case SceneExistInBuildResult.IncorrectName:
+                    _logger.Log("Incorrect scene name");
+                    return;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             
             var loadRequest = new SceneLoadRequest(sceneName, activateOnLoad, loadParams,activateParams);
             loadRequest.Mode = LoadSceneMode.Single;
