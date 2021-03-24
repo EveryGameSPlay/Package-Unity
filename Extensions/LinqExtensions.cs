@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Egsp.Core;
 
 namespace Egsp.Extensions.Linq
 {
@@ -158,6 +159,21 @@ namespace Egsp.Extensions.Linq
             }
 
             return collection;
+        }
+
+        public static Option<T> FirstOrNone<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof (source));
+            if (predicate == null)
+                throw new ArgumentNullException(nameof (predicate));
+            foreach (T source1 in source)
+            {
+                if (predicate(source1))
+                    return source1;
+            }
+
+            return Option<T>.None;
         }
     }
 }
