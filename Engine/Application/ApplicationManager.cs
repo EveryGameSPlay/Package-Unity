@@ -1,4 +1,6 @@
-﻿namespace Egsp.Core
+﻿using UnityEngine;
+
+namespace Egsp.Core
 {
     public static class ApplicationManager
     {
@@ -11,7 +13,7 @@
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else
-         Application.Quit();
+            Application.Quit();
 #endif
         }
     }
