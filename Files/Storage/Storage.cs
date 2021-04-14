@@ -49,8 +49,10 @@ namespace Egsp.Files
          
          static Storage()
          {
-             
-#if UNITY_ANDROID
+
+#if UNITY_EDITOR
+             RootFolder = Application.dataPath + "/Storage/";
+#elif UNITY_ANDROID
              RootFolder = Application.persistentDataPath + "/Storage/";
 #elif UNITY_IOS
              RootFolder = Application.persistentDataPath + "/Storage/";

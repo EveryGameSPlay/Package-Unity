@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Egsp.Core;
 
 namespace Egsp.Extensions.Collections
 {
@@ -71,6 +72,53 @@ namespace Egsp.Extensions.Collections
             }
 
             return linkedList;
+        }
+        
+        public static Option<LinkedListNode<T>> FirstOrNone<T>(this LinkedList<T> source, Func<T, bool> predicate)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof (source));
+            if (predicate == null)
+                throw new ArgumentNullException(nameof (predicate));
+
+            var node = source.First;
+            if(node == null)
+                return Option<LinkedListNode<T>>.None;
+
+            while (node != null)
+            {
+                if (predicate(node.Value))
+                    return node;
+
+                node = node.Next;
+            }
+            
+            return Option<LinkedListNode<T>>.None;
+        }
+
+        public static void Apply<T>(this LinkedList<T> source, Func<T, bool> predicate,
+            Action<LinkedListNode<T>> action)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof (source));
+            if (predicate == null)
+                throw new ArgumentNullException(nameof (predicate));
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            var node = source.First;
+            if (node == null)
+                return;
+
+            while (node != null)
+            {
+                if (predicate(node.Value))
+                {
+                    action(node);
+                    return;
+                }
+                node = node.Next;
+            }
         }
     }
 }
