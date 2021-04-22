@@ -10,6 +10,8 @@ using JetBrains.Annotations;
 namespace Egsp.Files
  {
      /// <summary>
+     /// <para>Через данный класс осуществляется доступ к данным вне приложения.
+     /// Учитывает платформу и инструментарий.</para>
      /// <para>Корневая папка на разных устройствах отличается.</para>
      /// <para>
      /// Mobile - Application.persistentDataPath/Storage/;

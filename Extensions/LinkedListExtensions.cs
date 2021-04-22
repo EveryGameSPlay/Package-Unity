@@ -6,6 +6,9 @@ namespace Egsp.Extensions.Collections
 {
     public static class LinkedListExtensions
     {
+        /// <summary>
+        /// Присоединяет другой список в конец текущего.
+        /// </summary>
         public static LinkedList<T> Join<T>(this LinkedList<T> source, LinkedList<T> another)
         {
             foreach (var value in another)
@@ -16,6 +19,9 @@ namespace Egsp.Extensions.Collections
             return source;
         }
         
+        /// <summary>
+        /// Присоединяет другой список в конец текущего. Перед присоединением можно вызвать действие над объектом.
+        /// </summary>
         public static LinkedList<T> Join<T>(this LinkedList<T> source, LinkedList<T> another, Action<T> action)
         {
             foreach (var value in another)
@@ -27,6 +33,9 @@ namespace Egsp.Extensions.Collections
             return source;
         }
 
+        /// <summary>
+        /// Убирает один элемент из списка. Возвращает ссылку на оригинальный список.
+        /// </summary>
         public static LinkedList<T> Remove<T>(this LinkedList<T> source, Func<T,bool> predicate)
         {
             var node = source.First;
@@ -45,6 +54,9 @@ namespace Egsp.Extensions.Collections
             return source;
         }
 
+        /// <summary>
+        /// Убирает все подходящие элементы из списка. Возвращает ссылку на оригинальный список.
+        /// </summary>
         public static LinkedList<T> RemoveAll<T>(this LinkedList<T> source, Func<T, bool> predicate)
         {
             var node = source.First;
@@ -74,6 +86,10 @@ namespace Egsp.Extensions.Collections
             return linkedList;
         }
         
+        /// <summary>
+        /// Возвращает первый найденный объект или ничего. Удобно для использования со структурами, т.к. структуры не
+        /// могут быть null.
+        /// </summary>
         public static Option<LinkedListNode<T>> FirstOrNone<T>(this LinkedList<T> source, Func<T, bool> predicate)
         {
             if (source == null)
@@ -96,6 +112,9 @@ namespace Egsp.Extensions.Collections
             return Option<LinkedListNode<T>>.None;
         }
 
+        /// <summary>
+        /// Применяет к первому найденному объекту переданный метод.
+        /// </summary>
         public static void Apply<T>(this LinkedList<T> source, Func<T, bool> predicate,
             Action<LinkedListNode<T>> action)
         {

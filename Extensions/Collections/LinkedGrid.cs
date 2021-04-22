@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace Egsp.Extensions.Collections
 {
+    // TODO: Вместо использования интерфейса объектов сетки, лучше использовать обертки по типу Node в LinkedList.
+    
     public class LinkedGrid<TLinkable> : Grid<TLinkable> where TLinkable : class, IGridLinkable<TLinkable>
     {
         protected LinkedGrid(int width, int height)

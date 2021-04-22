@@ -9,7 +9,7 @@ namespace Egsp.Core.Pathfinding
     /// <summary>
     /// Поиск пути по графу, использующий граф этого пакета.
     /// </summary>
-    /// <typeparam name="TVertex"></typeparam>
+    [Obsolete("Сам по себе алгоритм не устарел, но он использует устаревшие объекты.")]
     public sealed class GraphPathFinder<TVertex> 
         where TVertex : Vertex<TVertex>
     {

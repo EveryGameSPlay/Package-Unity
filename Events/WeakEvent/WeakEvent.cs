@@ -4,6 +4,10 @@ using Egsp.Extensions.Collections;
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// Данный тип события хранит слабые ссылки на своих подписчиков (делегаты и замыкания).
+    /// Также он позволяет получать данные с прошлого вызова всем поздним подписчикам.
+    /// </summary>
     public sealed class WeakEvent<TValue>
     {
         private LinkedList<WeakDelegateHandle<TValue>> _subscribers;

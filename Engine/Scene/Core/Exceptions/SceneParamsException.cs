@@ -2,6 +2,9 @@
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// Исключение выбрасываемое при несовпадении полученных и ожидаемых параметров сцены.
+    /// </summary>
     public class SceneParamsException<TParamsType> : Exception
     {
         public SceneParamsException() 

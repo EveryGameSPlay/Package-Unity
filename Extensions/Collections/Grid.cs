@@ -6,6 +6,9 @@ using Egsp.Core;
 
 namespace Egsp.Extensions.Collections
 {
+    /// <summary>
+    /// Параметры ячеек сетки.
+    /// </summary>
     public struct CellParams
     {
         private static CellParams _one = new CellParams(1,1);
@@ -22,6 +25,9 @@ namespace Egsp.Extensions.Collections
         }
     }
 
+    /// <summary>
+    /// Параметры сетки относительно сцены.
+    /// </summary>
     public struct Scene
     {
         public readonly Vector3 Offset;

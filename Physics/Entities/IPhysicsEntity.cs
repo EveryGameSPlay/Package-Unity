@@ -2,6 +2,9 @@
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// Сущность на которую можно воздействовать физическими силами.
+    /// </summary>
     public interface IPhysicsEntity
     {
         /// <summary>

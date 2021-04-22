@@ -2,6 +2,9 @@
 
 namespace Egsp.Core.Ui
 {
+    /// <summary>
+    /// Базовый класс для всех визуальных элементов интерфейса, содержащих логику.
+    /// </summary>
     public abstract class Visual: MonoBehaviour, IVisual
     {
         public bool InAnimation { get; private set; }

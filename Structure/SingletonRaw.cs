@@ -3,6 +3,9 @@ using JetBrains.Annotations;
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// Базовый класс для всех объектов-одиночек. Существует вне рамок Unity.
+    /// </summary>
     public abstract class SingletonRaw<TSingleton> : IDisposable
         where TSingleton : SingletonRaw<TSingleton>, new()
     {

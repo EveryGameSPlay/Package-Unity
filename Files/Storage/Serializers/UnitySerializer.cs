@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Egsp.Files.Serializers
 {
+    /// <summary>
+    /// Стандартный сериализатор Unity, использующий JsonUtility.
+    /// </summary>
     public class UnitySerializer : ISerializer
     {
         public byte[] Serialize<T>(T obj)

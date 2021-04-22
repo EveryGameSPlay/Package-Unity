@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// Данная реализация позволяет ограничить тип подписчиков.
+    /// </summary>
     public class TypedBus<TType> : IEventBus
         where TType : class
     {

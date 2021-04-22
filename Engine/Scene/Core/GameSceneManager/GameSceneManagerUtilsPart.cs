@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Egsp.Core
@@ -30,6 +31,26 @@ namespace Egsp.Core
             }
 
             return SceneExistInBuildResult.NotExist;
+        }
+
+        /// <summary>
+        /// True - если сцена существует. Дополнительно выводит сообщение в лог.
+        /// </summary>
+        public static bool SceneExistInBuild(string name, ILogger logger)
+        {
+            switch (SceneExistInBuild(name))
+            {
+                case SceneExistInBuildResult.Exist:
+                    return true;
+                case SceneExistInBuildResult.NotExist:
+                    logger.Log($"Scene: {name} - doesnt exist in build.");
+                    return false;
+                case SceneExistInBuildResult.IncorrectName:
+                    logger.Log("Incorrect scene name");
+                    return false;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public static Scene GetActiveScene()

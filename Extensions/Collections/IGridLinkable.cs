@@ -1,5 +1,8 @@
 ﻿namespace Egsp.Extensions.Collections
 {
+    /// <summary>
+    /// Объект, который будет использоваться LinkedGrid.
+    /// </summary>
     public interface IGridLinkable<TLinkable> where TLinkable : class
     {
         TLinkable Up { get; set; }

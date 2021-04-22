@@ -84,6 +84,9 @@ namespace Egsp.Extensions.Collections
 
         }
         
+        /// <summary>
+        /// Дополнительно возвращает номер индекса в сетке.
+        /// </summary>
         public static Vector3 GetNearest(this Grid grid, Vector3 position, out int x,out int y)
         {
             position = Snap(grid, position);

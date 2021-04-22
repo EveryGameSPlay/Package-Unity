@@ -2,7 +2,9 @@
 
 namespace Egsp.Core
 {
-    
+    /// <summary>
+    /// Интерфейс для всех контейнеров пользовательского интерфейса.
+    /// </summary>
     public interface IContainer 
     {
         /// <summary>

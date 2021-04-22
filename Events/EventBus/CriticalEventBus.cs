@@ -4,6 +4,9 @@ using JetBrains.Annotations;
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// Данный вид EventBus помещает вызов подписчиков в try-catch и собирает все ошибки в открытый список.
+    /// </summary>
     public sealed class CriticalEventBus : EventBus
     {
        

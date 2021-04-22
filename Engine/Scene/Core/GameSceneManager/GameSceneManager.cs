@@ -7,20 +7,26 @@ using UnityEngine.SceneManagement;
 
 namespace Egsp.Core
 {
-    // TODO: Добавить класс кеша парамтеров сцены с двумя параметрами load и active.
+    // TODO: Добавить класс кеша параметров сцены с двумя параметрами load и active.
+    // На самом деле это не необходимо, поэтому отложено до надобности.
     
     /// <summary>
-    /// Подписываться на данный менеджер нужно в Awake.
-    /// Это необходимо для своевременного подхвата событий SceneManager!
+    /// <para>Класс нужен для работы с загрузкой сцен и передачей параметров в них.
+    /// Также в классе определены полезные функции для получения различных данных.</para>
+    /// 
+    /// <para>Подписываться на данный менеджер нужно в Awake.
+    /// Это необходимо для своевременного подхвата событий SceneManager!</para>
     /// </summary>
     public sealed partial class GameSceneManager : SingletonRaw<GameSceneManager>
     {
         [NotNull] private ILogger _logger;
         
+        // Классы для обработки событий загрузки и активации сцен.
         [NotNull] private SceneLoadAssistant _sceneLoadAssistant;
         [NotNull] private SceneActivateAssistant _sceneActivateAssistant;
         
-        [NotNull] public EventBus Bus { get; private set; }
+        // Поток событий менеджера.
+        [NotNull] private EventBus Bus { get; set; }
 
         public GameSceneManager() : base()
         {
@@ -47,19 +53,8 @@ namespace Egsp.Core
         public void LoadSceneAdditive(string sceneName, bool activateOnLoad,[CanBeNull] SceneParams loadParams = null,
             [CanBeNull] SceneParams activateParams = null)
         {
-            switch (SceneExistInBuild(sceneName))
-            {
-                case SceneExistInBuildResult.Exist:
-                    break;
-                case SceneExistInBuildResult.NotExist:
-                    _logger.Log($"Scene: {sceneName} - doesnt exist in build.");
-                    return;
-                case SceneExistInBuildResult.IncorrectName:
-                    _logger.Log("Incorrect scene name");
-                    return;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            if (SceneExistInBuild(sceneName, _logger) == false)
+                return;
             
             var loadRequest = new SceneLoadRequest(sceneName, activateOnLoad, loadParams,activateParams);
             loadRequest.Mode = LoadSceneMode.Additive;
@@ -76,19 +71,8 @@ namespace Egsp.Core
         public void LoadSceneSingle(string sceneName, bool activateOnLoad, [CanBeNull] SceneParams loadParams = null,
             [CanBeNull] SceneParams activateParams = null)
         {
-            switch (SceneExistInBuild(sceneName))
-            {
-                case SceneExistInBuildResult.Exist:
-                    break;
-                case SceneExistInBuildResult.NotExist:
-                    _logger.Log($"Scene: {sceneName} - doesnt exist in build.");
-                    return;
-                case SceneExistInBuildResult.IncorrectName:
-                    _logger.Log("Incorrect scene name");
-                    return;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            if (SceneExistInBuild(sceneName, _logger) == false)
+                return;
             
             var loadRequest = new SceneLoadRequest(sceneName, activateOnLoad, loadParams,activateParams);
             loadRequest.Mode = LoadSceneMode.Single;
@@ -167,9 +151,20 @@ namespace Egsp.Core
             _sceneActivateAssistant.InjectActivateParams(scene, activateParams);
         }
 
+        /// <summary>
+        /// Задает уровень ограничения загрузки сцен с помощью других классов. Таких как SceneManager.
+        /// </summary>
         public void PreventOutsideLoading(PreventLoadType type)
         {
             _sceneLoadAssistant.PreventOutsideLoading = type;
+        }
+
+        /// <summary>
+        /// Добавляет оператора сцена к потоку событий. 
+        /// </summary>
+        public void RegisterSceneOperator(ISceneOperator sceneOperator)
+        {
+            Bus.Subscribe<ISceneOperator>(sceneOperator);
         }
         
         

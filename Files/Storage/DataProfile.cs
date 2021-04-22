@@ -2,6 +2,10 @@
 
 namespace Egsp.Files
 {
+    /// <summary>
+    /// Данные профиля хранения данных.
+    /// Ничего серьезного в себе не несет, только имя корневого каталога.
+    /// </summary>
     [Serializable]
     public struct DataProfile
     {

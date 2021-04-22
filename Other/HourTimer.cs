@@ -2,6 +2,9 @@
 
 namespace Gasanov.SpeedUtils.Time
 {
+    /// <summary>
+    /// Часовой таймер. Используется для отсчета времени.
+    /// </summary>
     public class HourTimer
     {
         public HourTimer(int startHour, int startMinute, int endHour, int endMinute)
@@ -140,9 +143,6 @@ namespace Gasanov.SpeedUtils.Time
             if (minutes < 0)
                 minutes = 0;
 
-            
         }
-        
-        
     }
 }

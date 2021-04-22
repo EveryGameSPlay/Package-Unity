@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Egsp.Extensions.Graphs
 {
+    // Здесь весь функионал работает, но мне не нравится его реализация.
 
     [Obsolete("Under construction.")][Serializable]
     public class Graph<TVertex>

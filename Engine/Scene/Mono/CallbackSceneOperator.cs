@@ -10,7 +10,10 @@ namespace Egsp.Core
     {
             
     }
-    // Для лучшего упраления лучше настроить очередь вызова скриптов. Оператор должен быть первее.
+    
+    /// <summary>
+    /// Данный компонент будет подхвачен менеджером сцен при старте сцены.
+    /// </summary>
     public class CallbackSceneOperator : MonoBehaviour, ISceneOperator
     {
         [SerializeField] private UnityEvent onActiveSceneChanged;
@@ -30,7 +33,7 @@ namespace Egsp.Core
 
         private void Awake()
         {
-            GameSceneManager.Instance.Bus.Subscribe<ISceneOperator>(this);
+            GameSceneManager.Instance.RegisterSceneOperator(this);
         }
 
         public Scene ParentScene => gameObject.scene;

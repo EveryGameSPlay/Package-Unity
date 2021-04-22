@@ -4,6 +4,9 @@ namespace Egsp.Extensions
 {
     public static class FileSystemExtensions
     {
+        /// <summary>
+        /// Приводит слеши к единому формату.
+        /// </summary>
         public static string NormalizePath(string path)
         {
             return path

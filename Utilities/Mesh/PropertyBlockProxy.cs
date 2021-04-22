@@ -3,6 +3,9 @@ using UnityEngine.Rendering;
 
 namespace Egsp.Utils.MeshUtilities
 {
+    /// <summary>
+    /// Позволяет устанавливать несколько значений материала в виде цепочки вызовов.
+    /// </summary>
     public class PropertyBlockProxy
     {
         /// <summary>
@@ -55,7 +58,9 @@ namespace Egsp.Utils.MeshUtilities
             return _propertyBlock.GetTexture(fieldName);
         }
         
-
+        /// <summary>
+        /// Применяет новые значения к материалу текущего рендера.
+        /// </summary>
         public void Apply()
         {
             TargetRenderer.SetPropertyBlock(_propertyBlock);

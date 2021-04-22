@@ -3,6 +3,15 @@ using System.Collections.Generic;
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// <para>Класс служит для вызова определенных методов у определенного типа подписчиков.</para>
+    ///
+    /// <para>На всех подписчиках установлены слабые ссылки WeakReference.
+    /// Поэтому отписка при уничтожении объекта не требуется.</para>
+    ///
+    /// <para>Вызов событий происходит по типу подписчиков.
+    /// Т.е. можно вызвать конкретный метод у всех подписчиков.</para>
+    /// </summary>
     public class EventBus : IEventBus
     {
         public Dictionary<Type, List<WeakReference>> Subscribers { get; protected set; }
@@ -12,6 +21,11 @@ namespace Egsp.Core
             Subscribers = new Dictionary<Type, List<WeakReference>>();
         }
         
+        /// <summary>
+        /// <para>Для корректной подписки лучше указать тип подписчика.</para>
+        /// <para>Например если нужно подписать по интерфейсу, а не по типу класса, то нужно явно указать
+        /// интерфейс.</para>
+        /// </summary>
         public virtual void Subscribe<TSubscriberType>(TSubscriberType subscriber)
             where TSubscriberType : class
         {

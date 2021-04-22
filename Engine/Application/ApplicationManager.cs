@@ -2,6 +2,9 @@
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// Здесь собраны высокоуровневые функции для контроля приложения.
+    /// </summary>
     public static class ApplicationManager
     {
         /// <summary>

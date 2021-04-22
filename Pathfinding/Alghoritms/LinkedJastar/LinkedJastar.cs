@@ -8,22 +8,24 @@ namespace Egsp.Core.Pathfinding
 {
     /// <summary>
     /// Поиск пути по связному зубчатому массиву.
+    /// Он намного бытрее поиска по двумерному массиву и просто быстрее поиска по зубчатому массиву,
+    /// т.к. использует доступ к соседям по ссылкам.
     /// Однопоточный.
     /// </summary>
     public class LinkedJastar
     {
         /// <summary>
-        /// Сетка ячеек
+        /// Сетка ячеек.
         /// </summary>
         public LinkedAPoint[][] Grid { get; private set; }
         
         /// <summary>
-        /// Ширина сетки
+        /// Ширина сетки.
         /// </summary>
         public int Width { get; private set; }
         
         /// <summary>
-        /// Высота сетки
+        /// Высота сетки.
         /// </summary>
         public int Height { get; private set; }
 

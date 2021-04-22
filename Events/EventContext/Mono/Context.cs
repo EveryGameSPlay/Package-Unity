@@ -3,6 +3,12 @@ using UnityEngine;
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// <para>Компонент контекста. При старте ищет все сущности типа IContextEntity в своем и дочерних объектах.
+    /// Также ищет все IContextEntityDetector.</para>
+    ///
+    /// <para>Чтобы использовать данный функионал нужно наследоваться от данного класса.</para>
+    /// </summary>
     public abstract class Context : MonoBehaviour, IContext
     {
         

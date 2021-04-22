@@ -6,6 +6,9 @@ using UnityEngine.Events;
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// Определяет базовый функионал для всех триггеров.
+    /// </summary>
     public abstract class TriggerBase : MonoBehaviour, ITrigger
     {
         /// <summary>
@@ -18,6 +21,9 @@ namespace Egsp.Core
         [SerializeField] private TriggerEvent onEnter = new TriggerEvent();
         [SerializeField] private TriggerEvent onExit = new TriggerEvent();
         
+        /// <summary>
+        /// Все помеченные сущности в данном кадре.
+        /// </summary>
         protected LinkedList<TriggerMark> Marked = new LinkedList<TriggerMark>();
 
         protected virtual void Update()

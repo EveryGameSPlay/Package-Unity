@@ -2,6 +2,20 @@
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// <para>Данная структура является аналогом option из языка F#.
+    /// Позволяет вернуть результат или ничего.</para>
+    ///
+    /// <para>Данный тип сигнализирует о том, что результат может вернуться в двух вариантах. 
+    /// Варианты: Some and None. Да, мы можем вернуть просто null, но как мы тогда узнаем,
+    /// что метод его будет возвращать. А вдруг не будет, или все же будет...</para>
+        
+    /// <para>Почему null отстой ->
+    /// https://www.westerndevs.com/Fsharp/Functional-programming/maybe-null-is-not-an-option/ </para>
+        
+    /// <para>Tony Hoare calls null references his billion dollar mistake. Using null values (NULL, Null, nil, etc)
+    /// makes code harder to maintain and to understand.</para>
+    /// </summary>
     public readonly struct Option<TValue>
     {
         private static Option<TValue> _none = new Option<TValue>();

@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Egsp.Other
 {
+    /// <summary>
+    /// Обертка для кривой редактора Unity.
+    /// </summary>
     [Serializable]
     public class Curve
     {

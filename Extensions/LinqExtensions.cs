@@ -30,6 +30,21 @@ namespace Egsp.Extensions.Linq
         }
 
         /// <summary>
+        /// Производит поиск по типу объекта в коллекции. Если объект являяется структурой,
+        /// то будет возвращена его копия.
+        /// </summary>
+        public static Option<T> FindTypeOption<T>(this IEnumerable source)
+        {
+            foreach (var obj in source)
+            {
+                if (obj is T casted)
+                    return casted;
+            }
+
+            return Option<T>.None;
+        } 
+
+        /// <summary>
         /// Возвращает все типы заданного типа. Может вернуть пустой список.
         /// </summary>
         public static List<T> FindTypes<T>(this IEnumerable source) where T : class
@@ -49,6 +64,22 @@ namespace Egsp.Extensions.Linq
 
             return coincidences;
         }
+        
+        /// <summary>
+        /// Производит поиск по типу объекта в коллекции. Если объект являяется структурой,
+        /// то будет возвращена его копия.
+        /// </summary>
+        public static List<T> FindTypesOption<T>(this IEnumerable source)
+        {
+            var coincidences = new List<T>();
+            
+            foreach (var obj in source)
+            {
+                if (obj is T casted)
+                    coincidences.Add(casted);
+            }
+            return coincidences;
+        } 
 
         /// <summary>
         /// Убирает все элементы списка являющиеся типом T.
@@ -126,6 +157,9 @@ namespace Egsp.Extensions.Linq
         }
 
         private static int _seed;
+        /// <summary>
+        /// При вызове данного метода ключ будет менять значение.
+        /// </summary>
         public static T RandomBySeed<T>(this IEnumerable<T> collection)
         {
             if (_seed == int.MaxValue)
@@ -134,7 +168,20 @@ namespace Egsp.Extensions.Linq
             _seed++;
             
             var randomIndex = new System.Random(_seed).Next(0,collection.Count());
+            return collection.ElementAt(randomIndex);
+        }
+        
+        /// <summary>
+        /// При вызове данного метода ключ будет менять значение. Данная версия метода работает быстрее оригинальной.
+        /// </summary>
+        public static T RandomBySeed<T>(this IEnumerable<T> collection, int count)
+        {
+            if (_seed == int.MaxValue)
+                _seed = int.MinValue;
 
+            _seed++;
+
+            var randomIndex = new System.Random(_seed).Next(0, count);
             return collection.ElementAt(randomIndex);
         }
         
@@ -161,6 +208,10 @@ namespace Egsp.Extensions.Linq
             return collection;
         }
 
+        /// <summary>
+        /// Возвращает первый найденный объект или ничего. Удобно для использования со структурами, т.к. структуры не
+        /// могут быть null.
+        /// </summary>
         public static Option<T> FirstOrNone<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             if (source == null)

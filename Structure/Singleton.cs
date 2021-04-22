@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// Базовый класс для всех компонентов-одиночек.
+    /// </summary>
     public abstract class Singleton<TSingleton> : MonoBehaviour where TSingleton : MonoBehaviour
     {
         public static TSingleton Instance

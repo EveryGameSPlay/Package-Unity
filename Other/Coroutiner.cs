@@ -5,12 +5,15 @@ using JetBrains.Annotations;
 
 namespace Egsp.Other
 {
-    public class Coroutiner : Singleton<Coroutiner>
+    /// <summary>
+    /// Обычный синглтон, который позволяет запускать корутины для не MonoBehaviour.
+    /// </summary>
+    public sealed class Coroutiner : Singleton<Coroutiner>
     {
         /// <summary>
         /// Запускает корутину.
         /// </summary>
-        public void StartRoutineInternal([NotNull]IEnumerator routine)
+        private void StartRoutineInternal([NotNull]IEnumerator routine)
         {
             if(routine == null)
                 throw new ArgumentNullException();
@@ -21,7 +24,7 @@ namespace Egsp.Other
         /// <summary>
         /// Останавливает корутину.
         /// </summary>
-        public void StopRoutineInternal([NotNull]IEnumerator routine)
+        private void StopRoutineInternal([NotNull]IEnumerator routine)
         {
             if(routine == null)
                 throw new ArgumentNullException();

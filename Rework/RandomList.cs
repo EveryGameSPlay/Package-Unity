@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-// TODO: REWORK!
+// TODO: REWORK! 
 namespace Gasanov.SpeedUtils.RandomUtilities
 {
     /// <summary>
@@ -9,6 +9,7 @@ namespace Gasanov.SpeedUtils.RandomUtilities
     /// который всегда возвращает уникальные элементы изначальной последовательности
     /// </summary>
     /// <typeparam name="T">Тип элементов последовательности</typeparam>
+    [Obsolete]
     public class RandomList<T>
     {
         /// <summary>

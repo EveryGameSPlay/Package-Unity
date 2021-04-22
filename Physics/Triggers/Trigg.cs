@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// Содержит информацию о воздействии объекта на триггер.
+    /// </summary>
     public struct Trigg
     {
         /// <summary>

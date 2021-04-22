@@ -5,6 +5,9 @@ using System.Text.RegularExpressions;
 
 namespace Egsp.Files
 {
+    /// <summary>
+    /// Данный класс позволяет считывать и создавать файлы со свойствами.
+    /// </summary>
     public class PropertyFileProxy
     {
         /// <summary>

@@ -4,6 +4,9 @@ using JetBrains.Annotations;
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// Базовый интерфейс для всех потоков событий по типу подписчиков.
+    /// </summary>
     public interface IEventBus
     {
         [NotNull]

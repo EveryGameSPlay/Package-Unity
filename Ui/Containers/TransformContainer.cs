@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// Контейнер, которому для размещения нужен лишь компонент Transform.
+    /// </summary>
     public class TransformContainer : MonoBehaviour, IContainer, IContextEntityDetector
     {
         public bool worldPositionStays;

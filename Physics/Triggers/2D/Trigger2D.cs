@@ -2,6 +2,9 @@
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// Базовый класс для всех триггеров в двумерном пространстве.
+    /// </summary>
     public abstract class Trigger2D : TriggerBase
     {
         [SerializeField] private Vector2 offset;

@@ -7,6 +7,9 @@ using Egsp.Files.Serializers;
 
 namespace Egsp.Files
 {
+    /// <summary>
+    /// Предоставляет методы для доступа к данным в определенном профиле.
+    /// </summary>
     public class DataProvider
     {
         /// <summary>

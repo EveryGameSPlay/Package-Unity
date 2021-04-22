@@ -8,6 +8,10 @@ namespace Egsp.Core.Ui
         void RootCanvas(Canvas rootCanvas);
     }
     
+    /// <summary>
+    /// Компонент объединяет элементы канваса в один контекст.
+    /// Дополнительно можно указать сторонние канвасы.
+    /// </summary>
     [RequireComponent(typeof(Canvas))]
     public class View : Context, IView
     {

@@ -3,12 +3,15 @@
 namespace Egsp.Core
 {
     /// <summary>
-    /// Представление физической силы, которое содержит вектор и режим.
+    /// Представление физической силы, которое содержит вектор и режим применения.
     /// </summary>
     public struct Force
     {
         private static readonly Force zeroForce = new Force(Vector3.zero);
 
+        /// <summary>
+        /// Прикладываемая сила.
+        /// </summary>
         public Vector3 vector;
         public ForceMode mode;
 

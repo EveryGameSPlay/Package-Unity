@@ -9,6 +9,9 @@ namespace Egsp.Core
         
     }
     
+    /// <summary>
+    /// Объекты данного типа засекают физические объекты и вызывают подписанные события.
+    /// </summary>
     public interface ITrigger
     {
         void OnEnterSubscribe(UnityAction<Trigg> triggAction);

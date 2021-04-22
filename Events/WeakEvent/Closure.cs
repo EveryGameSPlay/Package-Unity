@@ -2,8 +2,14 @@
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// Структура замыкания. Содержит в себе делегат и объект-хук, к которому привязано время жизни замыкания.
+    /// </summary>
     public struct Closure<TValue>
     {
+        /// <summary>
+        /// Данный объект влияет на время жизни замыкания.
+        /// </summary>
         private DelegateTarget<TValue> _hook;
 
         private Action<TValue> _closureAction;

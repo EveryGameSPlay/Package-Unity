@@ -2,6 +2,9 @@
 
 namespace Egsp.Core
 {
+    /// <summary>
+    /// Компонент определяющий логику физического препятствия, которое можно толкать.
+    /// </summary>
     [RequireComponent(typeof(Rigidbody2D))]
     public class PhysicsObstacle2D : MonoBehaviour, IMonoPhysicsEntity
     {
