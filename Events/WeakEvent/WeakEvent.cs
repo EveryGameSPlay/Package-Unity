@@ -63,7 +63,20 @@ namespace Egsp.Core
             }
         }
 
+        /// <summary>
+        /// Вызывает событие и кеширует значение.
+        /// </summary>
         public void Raise(TValue value)
+        {
+            RaiseOnce(value);
+            _cachedValue = value;
+        }
+
+        /// <summary>
+        /// Вызывает событие без последующего кеширования значения.
+        /// </summary>
+        /// <param name="value"></param>
+        public void RaiseOnce(TValue value)
         {
             foreach (var weakDelegateHandle in _subscribers)
             {
@@ -74,13 +87,11 @@ namespace Egsp.Core
             {
                 closureSubscriber.Raise(value);
             }
-
-            ClearNull();
-
-            _cachedValue = value;
+            
+            ClearNullSubscribers();
         }
 
-        private void ClearNull()
+        private void ClearNullSubscribers()
         {
             _subscribers.RemoveAll(x => x.Empty);
             _closureSubscribers.RemoveAll(x => x.Empty);
