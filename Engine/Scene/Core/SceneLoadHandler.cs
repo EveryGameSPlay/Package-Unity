@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Egsp.CSharp;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,7 +17,7 @@ namespace Egsp.Core
     }
     
     
-    public sealed class SceneLoadAssistant : IDisposable
+    public sealed class SceneLoadHandler : IDisposable
     {
         [NotNull] private readonly ILogger _logger;
         
@@ -49,7 +50,7 @@ namespace Egsp.Core
             }
         }
 
-        public SceneLoadAssistant([NotNull] EventBus bus, [NotNull] GameSceneManager gameSceneManager,
+        public SceneLoadHandler([NotNull] EventBus bus, [NotNull] GameSceneManager gameSceneManager,
             ILogger logger)
         {
             _bus = bus ?? throw new ArgumentNullException();
@@ -84,6 +85,13 @@ namespace Egsp.Core
             var request = GetLoadRequest(scene.name, true);
             if (request != null)
             {
+                // Вызываем все компоненты запроса, которые были добавлены к нему.
+                foreach (var component in request)
+                {
+                    if(component is IInvokableComponent invokableComponent)
+                        invokableComponent.Invoke();
+                }
+                
                 // Оповещаем о загрузке сцены.
                 _bus.Raise<ISceneOperator>(x=>
                     x.AfterSceneLoaded(scene, request.LoadParams));
@@ -98,7 +106,7 @@ namespace Egsp.Core
                     }
                     else
                     {
-                        _bus.Raise<SceneActivateAssistant>(x =>
+                        _bus.Raise<SceneActivateHandler>(x =>
                             x.CacheActivateParams(scene, request.ActivateParams));
                     }
                 }

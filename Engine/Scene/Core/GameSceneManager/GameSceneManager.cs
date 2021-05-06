@@ -22,8 +22,8 @@ namespace Egsp.Core
         [NotNull] private ILogger _logger;
         
         // Классы для обработки событий загрузки и активации сцен.
-        [NotNull] private SceneLoadAssistant _sceneLoadAssistant;
-        [NotNull] private SceneActivateAssistant _sceneActivateAssistant;
+        [NotNull] private SceneLoadHandler _sceneLoadHandler;
+        [NotNull] private SceneActivateHandler _sceneActivateHandler;
         
         // Поток событий менеджера.
         [NotNull] private EventBus Bus { get; set; }
@@ -34,56 +34,77 @@ namespace Egsp.Core
             
             Bus = new EventBus();
             
-            _sceneLoadAssistant = new SceneLoadAssistant(Bus, this, _logger)
+            _sceneLoadHandler = new SceneLoadHandler(Bus, this, _logger)
                 {PreventOutsideLoading = PreventLoadType.Error};
-            _sceneActivateAssistant = new SceneActivateAssistant(Bus, this, _logger);
+            _sceneActivateHandler = new SceneActivateHandler(Bus, this, _logger);
         }
 
-        public void LoadScene(string sceneName, LoadSceneMode mode = LoadSceneMode.Single)
+        public Option<SceneLoadRequestProxy> LoadScene(string sceneName, LoadSceneMode mode = LoadSceneMode.Single)
         {
             if (mode == LoadSceneMode.Single)
-                LoadSceneSingle(sceneName, true);
+                return LoadSceneSingle(sceneName, true);
             else
-                LoadSceneAdditive(sceneName, true);
+                return LoadSceneAdditive(sceneName, true);
+        }
+
+        /// <summary>
+        /// Загржает сцену с компонентом набора команд.
+        /// </summary>
+        public void LoadSceneWith(string sceneName, ActionsComponent actions, LoadSceneMode mode = LoadSceneMode.Single)
+        {
+            Option<SceneLoadRequestProxy> loadProxy; 
+            if (mode == LoadSceneMode.Single)
+                loadProxy = LoadSceneSingle(sceneName, true);
+            else
+                loadProxy = LoadSceneAdditive(sceneName, true);
+
+            if (loadProxy.IsSome)
+                loadProxy.Value.AddComponent(actions);
         }
 
         /// <summary>
         /// Запускает загрузку сцены в additive режиме и с параметрами.
         /// </summary>
-        public void LoadSceneAdditive(string sceneName, bool activateOnLoad,[CanBeNull] SceneParams loadParams = null,
+        public Option<SceneLoadRequestProxy> LoadSceneAdditive(
+            string sceneName, bool activateOnLoad,[CanBeNull] SceneParams loadParams = null,
             [CanBeNull] SceneParams activateParams = null)
         {
             if (SceneExistInBuild(sceneName, _logger) == false)
-                return;
+                return Option<SceneLoadRequestProxy>.None;
             
             var loadRequest = new SceneLoadRequest(sceneName, activateOnLoad, loadParams,activateParams);
             loadRequest.Mode = LoadSceneMode.Additive;
             
             // Уведомляем обработчик загрузки о новом запросе.
-            _sceneLoadAssistant.AcceptRequest(loadRequest);
+            _sceneLoadHandler.AcceptRequest(loadRequest);
             
             // Запускаем загрузку.
             var sceneRoutine = LoadSceneRoutine(sceneName, LoadSceneMode.Additive);
             Coroutiner.StartRoutine(sceneRoutine);
+
+            return new SceneLoadRequestProxy(loadRequest);
         }
 
         // При загрузке в режиме одиночной сцены, событие активации сработает первее чем событие загрузки.
-        public void LoadSceneSingle(string sceneName, bool activateOnLoad, [CanBeNull] SceneParams loadParams = null,
+        public Option<SceneLoadRequestProxy> LoadSceneSingle(
+            string sceneName, bool activateOnLoad, [CanBeNull] SceneParams loadParams = null,
             [CanBeNull] SceneParams activateParams = null)
         {
             if (SceneExistInBuild(sceneName, _logger) == false)
-                return;
+                return Option<SceneLoadRequestProxy>.None;
             
             var loadRequest = new SceneLoadRequest(sceneName, activateOnLoad, loadParams,activateParams);
             loadRequest.Mode = LoadSceneMode.Single;
             
             // Уведомляем обработчик загрузки о новом запросе.
-            _sceneLoadAssistant.AcceptRequest(loadRequest);
-            _sceneActivateAssistant.CacheSingleActivateParams(sceneName, activateParams);
+            _sceneLoadHandler.AcceptRequest(loadRequest);
+            _sceneActivateHandler.CacheSingleActivateParams(sceneName, activateParams);
             
             // Запускаем загрузку.
             var sceneRoutine = LoadSceneRoutine(sceneName, LoadSceneMode.Single);
             Coroutiner.StartRoutine(sceneRoutine);
+
+            return new SceneLoadRequestProxy(loadRequest);
         }
 
         /// <summary>
@@ -132,7 +153,7 @@ namespace Egsp.Core
             {
                 // Кешируем параметры.
                 if (activateParams != null)
-                    _sceneActivateAssistant.CacheActivateParams(scene, activateParams);
+                    _sceneActivateHandler.CacheActivateParams(scene, activateParams);
                 
                 SceneManager.SetActiveScene(scene);
                 return true;
@@ -147,8 +168,8 @@ namespace Egsp.Core
         /// </summary>
         public void InjectParamsToScene(Scene scene, SceneParams loadParams, SceneParams activateParams)
         {
-            _sceneLoadAssistant.InjectLoadParams(scene, loadParams);
-            _sceneActivateAssistant.InjectActivateParams(scene, activateParams);
+            _sceneLoadHandler.InjectLoadParams(scene, loadParams);
+            _sceneActivateHandler.InjectActivateParams(scene, activateParams);
         }
 
         /// <summary>
@@ -156,7 +177,7 @@ namespace Egsp.Core
         /// </summary>
         public void PreventOutsideLoading(PreventLoadType type)
         {
-            _sceneLoadAssistant.PreventOutsideLoading = type;
+            _sceneLoadHandler.PreventOutsideLoading = type;
         }
 
         /// <summary>
@@ -172,8 +193,8 @@ namespace Egsp.Core
         {
             base.Dispose();
             
-            _sceneLoadAssistant.Dispose();
-            _sceneActivateAssistant.Dispose();
+            _sceneLoadHandler.Dispose();
+            _sceneActivateHandler.Dispose();
         }
     }
 }

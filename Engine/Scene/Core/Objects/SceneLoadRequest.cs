@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Egsp.CSharp;
 using JetBrains.Annotations;
 using UnityEngine.SceneManagement;
 
@@ -8,7 +10,7 @@ namespace Egsp.Core
     /// Запрос на загрузку сцены, который ассоциирован с именем загружаемой сцены.
     /// Хранит в себе параметры.
     /// </summary>
-    public sealed class SceneLoadRequest
+    public sealed class SceneLoadRequest : DecoratorBase
     {
         public readonly string SceneName;
         
@@ -46,6 +48,38 @@ namespace Egsp.Core
 
             LoadParams = loadParams;
             ActivateParams = activateParams;
+        }
+    }
+
+    /// <summary>
+    /// Прослойка функционала между запросом и пользователем. 
+    /// </summary>
+    public struct SceneLoadRequestProxy
+    {
+        private SceneLoadRequest _request;
+
+        public SceneLoadRequestProxy(SceneLoadRequest request)
+        {
+            _request = request;
+        }
+
+        public void AddComponent<TComponent>(TComponent component)
+            where TComponent : Component
+        {
+            _request.AddComponent(component);
+        }
+    }
+
+    public class ActionsComponent : Component, IInvokableComponent
+    {
+        public Queue<Action> Actions = new Queue<Action>();
+        
+        public void Invoke()
+        {
+            foreach (var action in Actions)
+            {
+                action.Invoke();
+            }
         }
     }
 }

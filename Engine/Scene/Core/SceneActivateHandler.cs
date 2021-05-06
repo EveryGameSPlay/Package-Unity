@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace Egsp.Core
 {
-    public class SceneActivateAssistant : IDisposable
+    public class SceneActivateHandler : IDisposable
     {
         [NotNull] private readonly ILogger _logger;
         
@@ -23,7 +23,7 @@ namespace Egsp.Core
         /// </summary>
         [CanBeNull] private Tuple<string, SceneParams> _sceneSingleActivateParamsCache;
 
-        public SceneActivateAssistant([NotNull] EventBus bus, [NotNull] GameSceneManager gameSceneManager,
+        public SceneActivateHandler([NotNull] EventBus bus, [NotNull] GameSceneManager gameSceneManager,
             ILogger logger)
         {
             _bus = bus ?? throw new ArgumentNullException();
