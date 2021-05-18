@@ -6,8 +6,7 @@ namespace Egsp.Core
     /// <summary>
     /// Базовый класс для всех объектов-одиночек. Существует вне рамок Unity.
     /// </summary>
-    public abstract class SingletonRaw<TSingleton> : IDisposable
-        where TSingleton : SingletonRaw<TSingleton>, new()
+    public abstract class SingletonRaw<TSingleton> where TSingleton : SingletonRaw<TSingleton>, new()
     {
         [NotNull]
         public static TSingleton Instance
@@ -19,7 +18,7 @@ namespace Egsp.Core
                     if (!AllowLazyInstance)
                         throw new LazyInstanceException(typeof(TSingleton));
 
-                    CreateInstanceSafely();
+                    CreateInstance();
                 }
 
                 return _instance ?? throw new NullReferenceException();
@@ -46,6 +45,9 @@ namespace Egsp.Core
         }
         
         private static TSingleton _instance;
+        
+        public static WeakEvent<TSingleton> OnInstanceCreated = new WeakEvent<TSingleton>();
+
 
         public static void DestroyIfExist()
         {
@@ -68,10 +70,16 @@ namespace Egsp.Core
         private static void CreateInstanceSafely()
         {
             _instance = new TSingleton();
+            _instance.OnInstanceCreatedInternal();
+        }
+        
+        protected virtual void OnInstanceCreatedInternal()
+        {
+            OnInstanceCreated.Raise(_instance);
         }
         
         
-        public virtual void Dispose()
+        protected virtual void Dispose()
         {
         }
     }

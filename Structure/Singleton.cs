@@ -21,8 +21,7 @@ namespace Egsp.Core
 
                     if (_instance == null)
                     {
-                        CreateInstanceSafely();
-                        CallOnInstanceCreated();
+                        CreateInstance();
                     }
                     else
                     {
@@ -70,6 +69,8 @@ namespace Egsp.Core
 
         private static TSingleton _instance;
         private static GameObject _instanceGameObject;
+        
+        public static WeakEvent<TSingleton> OnInstanceCreated = new WeakEvent<TSingleton>();
 
 
         /// <param name="immediate">Уничтожить мгновенно, а не в конце кадра.</param>
@@ -77,7 +78,8 @@ namespace Egsp.Core
         {
             if (_instance != null)
             {
-                _instance = null;
+                // Данная операция срабатывает в OnDestroy().
+                // _instance = null;
                 
                 if (_instanceGameObject == null)
                     return;
@@ -108,8 +110,6 @@ namespace Egsp.Core
             }
             
             CreateInstanceSafely();
-            
-            CallOnInstanceCreated();
 
             return _instance;
         }
@@ -137,19 +137,6 @@ namespace Egsp.Core
                 typeof(TSingleton));
         }
 
-        /// <summary>
-        /// Вызывает метод-событие уведомлящий экземпляр о появлении.
-        /// Вызывается после Awake.
-        /// </summary>
-        private static void CallOnInstanceCreated()
-        {
-            var singletone = _instance as Singleton<TSingleton>;
-            if (singletone != null)
-            {
-                singletone.OnInstanceCreated();
-            }
-        }
-
         protected virtual void Awake()
         {
             // Если на сцене уже существует экземпляр, то текущий нужно уничтожить.
@@ -165,14 +152,16 @@ namespace Egsp.Core
             {
                 _instance = this as TSingleton;
                 _instanceGameObject = gameObject;
+                OnInstanceCreatedInternal();
             }
         }
         
         /// <summary>
         /// Вызывается при создании экземпляра.
         /// </summary>
-        protected virtual void OnInstanceCreated()
+        protected virtual void OnInstanceCreatedInternal()
         {
+            OnInstanceCreated.Raise(_instance);
         } 
     }
 }

@@ -189,7 +189,7 @@ namespace Egsp.Core
         }
         
         
-        public override void Dispose()
+        protected override void Dispose()
         {
             base.Dispose();
             
