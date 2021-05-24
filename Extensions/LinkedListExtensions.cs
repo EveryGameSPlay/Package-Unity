@@ -34,7 +34,7 @@ namespace Egsp.Extensions.Collections
         }
 
         /// <summary>
-        /// Убирает один элемент из списка. Возвращает ссылку на оригинальный список.
+        /// Убирает один элемент из списка. Возвращает ссылку на оригинальный список. EGSP.
         /// </summary>
         public static LinkedList<T> Remove<T>(this LinkedList<T> source, Func<T,bool> predicate)
         {

@@ -1,36 +1,65 @@
-﻿namespace Egsp.CSharp
+﻿using System;
+using System.Collections.Generic;
+
+namespace Egsp.CSharp
 {
-    public abstract class Component
+    /// <summary>
+    /// Базовый интерфейс всех компонентов.
+    /// </summary>
+    public interface IComponent
     {
+        ObjectLiveState LiveState { get; }
+    }
+    
+    public abstract class Component : IComponent
+    {
+        public ObjectLiveState LiveState { get; private set; } = ObjectLiveState.Alive;
+        
+        /// <summary>
+        /// Объект, который в данный момент несет данный компонент.
+        /// Ссылка будет убрана только в конце уничтожения текущего компонента.
+        /// </summary>
         public DecoratorBase Parent { get; private set; }
 
-        public static TComponent Create<TComponent>(DecoratorBase parent)
-            where TComponent : Component, new()
+        public void SetParent(DecoratorBase parent)
         {
-            var component = new TComponent();
-
-            component.Parent = parent;
-            return component;
+            if (Parent != null)
+                throw new InvalidOperationException("Нельзя назначить родителя компоненту, который уже имеет родителя");
+            
+            Parent = parent;
         }
 
-        public static void Attach(Component component, DecoratorBase parent)
+        private void RemoveParent()
         {
-            if (component.Parent == null)
-            {
-                component.Parent = parent;
-            }
+            if (Parent == null)
+                return;
+
+            Parent.Remove(this);
         }
 
-        public static void Detach(Component component, DecoratorBase parent)
+        /// <summary>
+        /// Уничтожает данный компонент.
+        /// </summary>
+        public void Destroy()
         {
-            if (parent == component.Parent)
-            {
-                component.Parent = null;
-            }
+            if (LiveState != ObjectLiveState.Alive)
+                return;
+
+            LiveState = ObjectLiveState.Destroying;
+            
+            DestroyInternal();
+            
+            RemoveParent();
+            LiveState = ObjectLiveState.Destroyed;
+        }
+
+        protected virtual void DestroyInternal()
+        {
         }
     }
 
-    public interface IInvokableComponent
+    [Obsolete]
+    public interface IInvokableComponent : IComponent
     {
         void Invoke();
     }
