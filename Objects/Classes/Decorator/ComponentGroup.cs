@@ -19,31 +19,34 @@ namespace Egsp.CSharp
     /// <summary>
     /// Группа компонентов, к которой можно применить одинаковое действие.
     /// </summary>
-    public class ComponentGroup<TInvokeType> : ComponentGroup
-        where TInvokeType : class, IComponent
+    public class ComponentGroup<TComponentInvokeType> : ComponentGroup
+        where TComponentInvokeType : class, IComponent
     {
         /// <summary>
         /// Все текущие компоненты группы.
         /// Уничтоженные компоненты очищаются после каждого вызова Invoke.
         /// </summary>
-        public readonly List<TInvokeType> Components;
+        public readonly List<TComponentInvokeType> Components;
 
         /// <summary>
         /// Действие, вызываемое для каждого компонента.
         /// </summary>
-        public readonly Action<TInvokeType> Action;
+        public readonly Action<TComponentInvokeType> Action;
 
-        public ComponentGroup(Action<TInvokeType> action) : base(typeof(TInvokeType))
+        public ComponentGroup(Action<TComponentInvokeType> action) : base(typeof(TComponentInvokeType))
         {
             Action = action;
-            Components = new List<TInvokeType>();
+            Components = new List<TComponentInvokeType>();
         }
 
-        public void AddComponent(TInvokeType component)
+        public void AddComponent(TComponentInvokeType component)
         {
             Components.Add(component);
         }
 
+        /// <summary>
+        /// Вызывает заданное действие для всех компонентов в рабочем состоянии.
+        /// </summary>
         public void Invoke()
         {
             for (var i = 0; i < Components.Count; i++)

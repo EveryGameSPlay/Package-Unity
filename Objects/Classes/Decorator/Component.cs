@@ -9,6 +9,12 @@ namespace Egsp.CSharp
     public interface IComponent
     {
         ObjectLiveState LiveState { get; }
+
+        DecoratorBase Decorator { get; }
+
+        void SetDecorator(DecoratorBase parent);
+
+        void Destroy();
     }
     
     public abstract class Component : IComponent
@@ -19,22 +25,23 @@ namespace Egsp.CSharp
         /// Объект, который в данный момент несет данный компонент.
         /// Ссылка будет убрана только в конце уничтожения текущего компонента.
         /// </summary>
-        public DecoratorBase Parent { get; private set; }
+        public DecoratorBase Decorator { get; private set; }
 
-        public void SetParent(DecoratorBase parent)
+        public void SetDecorator(DecoratorBase parent)
         {
-            if (Parent != null)
-                throw new InvalidOperationException("Нельзя назначить родителя компоненту, который уже имеет родителя");
+            if (Decorator != null)
+                throw new InvalidOperationException("Нельзя назначить декоратор компоненту," +
+                                                    " который уже имеет декоратор");
             
-            Parent = parent;
+            Decorator = parent;
         }
 
-        private void RemoveParent()
+        private void RemoveDecorator()
         {
-            if (Parent == null)
+            if (Decorator == null)
                 return;
 
-            Parent.Remove(this);
+            Decorator.Remove(this);
         }
 
         /// <summary>
@@ -47,13 +54,16 @@ namespace Egsp.CSharp
 
             LiveState = ObjectLiveState.Destroying;
             
-            DestroyInternal();
+            OnDestroyInternal();
             
-            RemoveParent();
+            RemoveDecorator();
             LiveState = ObjectLiveState.Destroyed;
         }
 
-        protected virtual void DestroyInternal()
+        /// <summary>
+        /// Вызывается перед окончательным уничтожением.
+        /// </summary>
+        protected virtual void OnDestroyInternal()
         {
         }
     }
