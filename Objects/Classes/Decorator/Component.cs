@@ -34,6 +34,7 @@ namespace Egsp.CSharp
                                                     " который уже имеет декоратор");
             
             Decorator = parent;
+            OnDecoratorSetInternal();
         }
 
         private void RemoveDecorator()
@@ -60,6 +61,10 @@ namespace Egsp.CSharp
             LiveState = ObjectLiveState.Destroyed;
         }
 
+        protected virtual void OnDecoratorSetInternal()
+        {
+        }
+        
         /// <summary>
         /// Вызывается перед окончательным уничтожением.
         /// </summary>

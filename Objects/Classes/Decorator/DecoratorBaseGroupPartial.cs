@@ -1,25 +1,36 @@
 ﻿using System;
 using System.Linq;
+using Egsp.Core;
 
 namespace Egsp.CSharp
 {
     public abstract partial class DecoratorBase
     {
-        protected ComponentGroup AddToGroup<TType>(TType component, Action<TType> groupAction)
-            where TType : class, IComponent
+        /// <summary>
+        /// <para>Добавляет объект к существующей группе (создает новую при отсутствии).</para>
+        /// <para>Возвращает подходящую группу. Если возвращено None, значит объект не подходит по типу.
+        /// Следует сохранять ссылку на полученную группу, чтобы позже ее использовать.</para>
+        /// <para>Для одних и тех же типов группа будет возвращена одна и та же.</para>
+        /// </summary>
+        protected Option<ComponentGroup<TInterfaceType>> Group<TInterfaceType>(IComponent component)
+            where TInterfaceType : class, IComponent
         {
-            var type = typeof(TType);
-            var group = Groups.FirstOrDefault(x => x.ComponentsType == type) as ComponentGroup<TType>;
-
-            // Создание новой группы.
-            if (group == null)
+            if (component is TInterfaceType castedComponent)
             {
-                group = new ComponentGroup<TType>(groupAction);
-                Groups.Add(group);
+                var type = typeof(TInterfaceType);
+                var group = Groups.FirstOrDefault(x => x.ComponentsType == type) as ComponentGroup<TInterfaceType>;
+
+                // Создание новой группы.
+                if (group == null)
+                {
+                    group = new ComponentGroup<TInterfaceType>();
+                    Groups.Add(group);
+                }
+
+                group.AddComponent(castedComponent);
             }
 
-            group.AddComponent(component);
-            return group;
+            return Option<ComponentGroup<TInterfaceType>>.None;
         }
     }
 }

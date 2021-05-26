@@ -33,9 +33,8 @@ namespace Egsp.CSharp
         /// </summary>
         public readonly Action<TComponentInvokeType> Action;
 
-        public ComponentGroup(Action<TComponentInvokeType> action) : base(typeof(TComponentInvokeType))
+        public ComponentGroup() : base(typeof(TComponentInvokeType))
         {
-            Action = action;
             Components = new List<TComponentInvokeType>();
         }
 
@@ -47,7 +46,7 @@ namespace Egsp.CSharp
         /// <summary>
         /// Вызывает заданное действие для всех компонентов в рабочем состоянии.
         /// </summary>
-        public void Invoke()
+        public void Invoke(Action<TComponentInvokeType> action)
         {
             for (var i = 0; i < Components.Count; i++)
             {

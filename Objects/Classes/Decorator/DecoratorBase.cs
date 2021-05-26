@@ -34,6 +34,8 @@ namespace Egsp.CSharp
         {
             component.SetDecorator(this);
             Components.Add(type, component);
+            OnAddComponentInternal(component);
+            OnGroupComponent(component);
         }
 
         // REMOVE
