@@ -27,6 +27,8 @@ namespace Egsp.Core
         public readonly bool IsSome;
         
         private readonly TValue _value;
+
+        public bool IsNone => !IsSome;
         
         public TValue Value
         {
@@ -42,13 +44,8 @@ namespace Egsp.Core
         public Option(TValue value)
         {
             _value = value;
-            IsSome = true;
+            IsSome = value != null;
         }
-        
-        /// <summary>
-        /// Создает новый экземпляр со значением. Альтернатива new OptionT(value).
-        /// </summary>
-        public static Option<TValue> Some(TValue value) => new Option<TValue>(value);
 
         public static explicit operator TValue(Option<TValue> optional)
         {
@@ -74,7 +71,12 @@ namespace Egsp.Core
             else
                 return IsSome == other.IsSome;
         }
-        
+
+        public override string ToString()
+        {
+            return IsSome ? "Some" : "None";
+        }
+
         public class OptionNoneValueAccessException : Exception
         {
         }
