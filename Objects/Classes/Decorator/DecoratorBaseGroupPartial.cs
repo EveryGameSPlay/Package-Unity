@@ -28,6 +28,7 @@ namespace Egsp.CSharp
                 }
 
                 group.AddComponent(castedComponent);
+                return group;
             }
 
             return Option<ComponentGroup<TInterfaceType>>.None;

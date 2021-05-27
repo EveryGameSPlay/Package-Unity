@@ -28,11 +28,6 @@ namespace Egsp.CSharp
         /// </summary>
         public readonly List<TComponentInvokeType> Components;
 
-        /// <summary>
-        /// Действие, вызываемое для каждого компонента.
-        /// </summary>
-        public readonly Action<TComponentInvokeType> Action;
-
         public ComponentGroup() : base(typeof(TComponentInvokeType))
         {
             Components = new List<TComponentInvokeType>();
@@ -52,18 +47,33 @@ namespace Egsp.CSharp
             {
                 var component = Components[i];
 
-                // If not alive.
-                if (component == null ||
-                    component.LiveState != ObjectLiveState.Alive)
-                {
-                    Components[i] = null;
+                if(CheckAlive(component,i) != ObjectLiveState.Alive)
                     continue;
-                }
 
-                Action?.Invoke(component);
+                action?.Invoke(component);
 
                 ClearNulls();
             }
+        }
+
+        /// <summary>
+        /// Метод для ручного управления вызовами. Проверяет состояние компонента.
+        /// </summary>
+        public ObjectLiveState CheckAlive(TComponentInvokeType component, int index)
+        {
+            if (component == null)
+            {
+                return ObjectLiveState.Destroyed;
+            }
+            
+            // If not alive.
+            if (component.LiveState != ObjectLiveState.Alive)
+            {
+                Components[index] = null;
+                return component.LiveState;
+            }
+
+            return ObjectLiveState.Alive;
         }
 
         private void ClearNulls()
