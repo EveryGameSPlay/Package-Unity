@@ -1,0 +1,16 @@
+{
+  "name": "egsp.unity-package",
+  "version": "1.0.0",
+  "displayName": "Egsp Unity Package",
+  "description": "Unity workflow extension library.",
+  "keywords": [
+    "library, utility"
+  ],
+  "author": {
+    "name": "Kirill Gasanov",
+    "email": "gasanov.kirill.dev@gmail.com",
+    "url": "https://github.com/EveryGameSPlay"
+  },
+  "type": "library",
+  "unity": "2017.1"
+}
