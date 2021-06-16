@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace Egsp.Utils.MeshUtilities
+namespace Egsp.Core
 {
     /// <summary>
     /// Позволяет устанавливать несколько значений материала в виде цепочки вызовов.

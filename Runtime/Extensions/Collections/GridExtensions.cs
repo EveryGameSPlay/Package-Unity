@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Egsp.Extensions.Collections
+namespace Egsp.Core
 {
     public static class GridExtensions
     {
@@ -9,7 +9,7 @@ namespace Egsp.Extensions.Collections
         /// </summary>
         public static Vector3 GetPositionRaw(this Grid grid, int x,int y)
         {
-            return new Vector3(x * grid.Cell.Width, y * grid.Cell.Height) + grid.Scene.Offset;
+            return new Vector3(x * grid.CellParamsValue.Width, y * grid.CellParamsValue.Height) + grid.SceneParamsValue.Offset;
         }
 
         /// <summary>
@@ -17,21 +17,21 @@ namespace Egsp.Extensions.Collections
         /// </summary>
         public static  Vector3 GetPosition(this Grid grid, int x,int y)
         {
-            return new Vector3(x * grid.Cell.Width, y * grid.Cell.Height) 
-                   + new Vector3(grid.Cell.Width, grid.Cell.Height) * 0.5f + grid.Scene.Offset;
+            return new Vector3(x * grid.CellParamsValue.Width, y * grid.CellParamsValue.Height) 
+                   + new Vector3(grid.CellParamsValue.Width, grid.CellParamsValue.Height) * 0.5f + grid.SceneParamsValue.Offset;
         }
 
         /// <summary>
         /// Возвращает мировую позицию нижнего левого угла.
         /// </summary>
         public static Vector3 BottomLeft(this Grid grid)
-            => grid.Scene.Offset;
+            => grid.SceneParamsValue.Offset;
 
         /// <summary>
         /// Возвращает мировую позицию верхнего правого угла.
         /// </summary>
         public static Vector3 TopRight(this Grid grid)
-            => grid.Scene.Offset + new Vector3(grid.Cell.Width * grid.Width, grid.Cell.Height * grid.Height);
+            => grid.SceneParamsValue.Offset + new Vector3(grid.CellParamsValue.Width * grid.Width, grid.CellParamsValue.Height * grid.Height);
         
         /// <summary>
         /// Возвращает позицию в зависимости от размерности ячеек.
@@ -39,11 +39,11 @@ namespace Egsp.Extensions.Collections
         /// <param name="position">Позиция в мировом пространстве</param>
         public static Vector3 SnapRaw(this Grid grid, Vector3 position)
         {
-            position.x = Mathf.Floor(position.x / grid.Cell.Width)
-                         *  grid.Cell.Width;
+            position.x = Mathf.Floor(position.x / grid.CellParamsValue.Width)
+                         *  grid.CellParamsValue.Width;
             
-            position.y = Mathf.Floor(position.y /  grid.Cell.Height)
-                         * grid.Cell.Height;
+            position.y = Mathf.Floor(position.y /  grid.CellParamsValue.Height)
+                         * grid.CellParamsValue.Height;
 
             return position;
         }
@@ -53,11 +53,11 @@ namespace Egsp.Extensions.Collections
         /// </summary>
         public static Vector3 Snap(this Grid grid,Vector3 position)
         {
-            position.x = Mathf.Floor(position.x / grid.Cell.Width)
-                * grid.Cell.Width+grid.Cell.Width*0.5f;
+            position.x = Mathf.Floor(position.x / grid.CellParamsValue.Width)
+                * grid.CellParamsValue.Width+grid.CellParamsValue.Width*0.5f;
             
-            position.y = Mathf.Floor(position.y /  grid.Cell.Height)
-                *  grid.Cell.Height+ grid.Cell.Height*0.5f;
+            position.y = Mathf.Floor(position.y /  grid.CellParamsValue.Height)
+                *  grid.CellParamsValue.Height+ grid.CellParamsValue.Height*0.5f;
 
             return position;
         }

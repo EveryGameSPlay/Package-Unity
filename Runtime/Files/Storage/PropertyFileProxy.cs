@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace Egsp.Files
+namespace Egsp.Core
 {
     /// <summary>
     /// Данный класс позволяет считывать и создавать файлы со свойствами.
@@ -122,7 +122,6 @@ namespace Egsp.Files
 
                     case NotExistProperty.Exception:
                         throw new Exception($"Property :{pName}: does not exist!");
-                        break;
                 }
             }
 
@@ -152,7 +151,6 @@ namespace Egsp.Files
 
                     case IncorrectPropertyType.Exception:
                         throw new Exception($"Property :{pName}: does not exist!");
-                        break;
                 }
             }
             
@@ -184,7 +182,6 @@ namespace Egsp.Files
 
                     case IncorrectPropertyType.Exception:
                         throw new Exception($"Property :{pName}: does not exist!");
-                        break;
                 }
             }
             return this;
@@ -213,7 +210,6 @@ namespace Egsp.Files
 
                     case IncorrectPropertyType.Exception:
                         throw new Exception($"Property :{pName}: does not exist!");
-                        break;
                 }
             }
             return this;
@@ -244,8 +240,6 @@ namespace Egsp.Files
                 Properties.Add(pName, value.ToString());
                 return this;
             }
-            
-            return this;
         }
 
         /// <summary>
@@ -264,8 +258,6 @@ namespace Egsp.Files
                 Properties.Add(pName, value.ToString());
                 return this;
             }
-            
-            return this;
         }
 
         /// <summary>
@@ -284,8 +276,6 @@ namespace Egsp.Files
                 Properties.Add(pName, value.ToString());
                 return this;
             }
-            
-            return this;
         }
 
         /// <summary>
@@ -304,8 +294,6 @@ namespace Egsp.Files
                 Properties.Add(pName, value);
                 return this;
             }
-            
-            return this;
         }
 
         /// <summary>

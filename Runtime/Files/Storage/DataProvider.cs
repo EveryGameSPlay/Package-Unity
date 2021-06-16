@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Egsp.Core;
-using Egsp.Files.Serializers;
 
-namespace Egsp.Files
+namespace Egsp.Core
 {
     /// <summary>
     /// Предоставляет методы для доступа к данным в определенном профиле.

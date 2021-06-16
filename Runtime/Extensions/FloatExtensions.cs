@@ -1,7 +1,7 @@
 ﻿
 using System.Globalization;
 
-namespace Egsp.Extensions.Primitives
+namespace Egsp.Core
 {
     public static class FloatExtensions
     {

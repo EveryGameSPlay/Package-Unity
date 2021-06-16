@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Egsp.Core;
 
-namespace Egsp.Extensions.Collections
+namespace Egsp.Core
 {
     public static class LinkedListExtensions
     {

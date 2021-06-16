@@ -2,10 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Egsp.Extensions.Linq;
 using JetBrains.Annotations;
 
-namespace Egsp.RandomTools
+namespace Egsp.Core
 {
     public class WeightedItem<TItem> 
     {

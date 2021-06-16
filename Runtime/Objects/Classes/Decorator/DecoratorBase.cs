@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Egsp.Core;
 
-namespace Egsp.CSharp
+namespace Egsp.Core.Components
 {
     /// <summary>
     /// Базовый класс для объектов, к которым можно прикреплять компоненты.

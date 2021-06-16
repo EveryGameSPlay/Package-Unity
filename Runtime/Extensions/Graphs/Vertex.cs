@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Egsp.Extensions.Graphs
+namespace Egsp.Core
 {
     /// <summary>
     /// Представление вершины графа.

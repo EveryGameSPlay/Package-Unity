@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Egsp.Extensions.Graphs;
-using Egsp.Extensions.Linq;
 
 namespace Egsp.Core.Pathfinding
 {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Egsp.Utils.MathUtilities
+namespace Egsp.Core.Utils
 {
     public static class MathUtils
     {

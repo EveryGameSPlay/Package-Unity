@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using Egsp.Other;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;

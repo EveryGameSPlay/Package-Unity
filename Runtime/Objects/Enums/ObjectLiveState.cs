@@ -1,4 +1,4 @@
-﻿namespace Egsp.CSharp
+﻿namespace Egsp.Core
 {
     public enum ObjectLiveState
     {

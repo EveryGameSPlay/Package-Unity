@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Egsp.Utils.GameObjectUtilities
+namespace Egsp.Core.Utils
 {
     public static class GameObjectUtils
     {

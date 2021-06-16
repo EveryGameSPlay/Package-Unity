@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
-namespace Egsp.Utils.MeshUtilities
+namespace Egsp.Core
 {
     public class RendererObject : MonoBehaviour
     {
         /// <summary>
         /// Рендер компонент игрового объекта.
         /// </summary>
-        public Renderer renderer { get; set; }
+        public new Renderer renderer { get; set; }
 
         /// <summary>
         /// Возвращает посредника для установки значений материалу.

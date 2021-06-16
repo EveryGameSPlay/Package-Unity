@@ -5,7 +5,7 @@ using UnityEngine;
 using Random = System.Random;
 using URandom = UnityEngine.Random;
 
-namespace Egsp.RandomTools
+namespace Egsp.Core
 {
     /// <summary>
     /// Класс, содержащий методы для операций со случайностями

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Egsp.Extensions.Graphs
+namespace Egsp.Core
 {
     public class Vertex2D : Vertex<Vertex2D>
     {

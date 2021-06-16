@@ -1,25 +1,25 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Egsp.Other
+namespace Egsp.Core
 {
     /// <summary>
     /// Обертка для кривой редактора Unity.
     /// </summary>
     [Serializable]
-    public class Curve
+    public struct Curve
     {
-        [SerializeField] private AnimationCurve curve;
+        [SerializeField] private AnimationCurve value;
 
         /// <summary>
         /// Получение значения по позиции точки на оси x.
         /// </summary>
         public float Get(float pointX)
         {
-            if (curve == null)
+            if (value == null)
                 return 0;
 
-            return curve.Evaluate(pointX);
+            return value.Evaluate(pointX);
         }
     }
 }

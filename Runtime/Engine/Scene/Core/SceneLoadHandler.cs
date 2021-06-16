@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Egsp.CSharp;
+using Egsp.Core.Components;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;

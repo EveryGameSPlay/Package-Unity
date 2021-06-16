@@ -3,7 +3,7 @@ using System.Collections;
 using Egsp.Core;
 using JetBrains.Annotations;
 
-namespace Egsp.Other
+namespace Egsp.Core
 {
     /// <summary>
     /// Обычный синглтон, который позволяет запускать корутины для не MonoBehaviour.

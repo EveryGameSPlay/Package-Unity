@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Egsp.Files
+namespace Egsp.Core
 {
     /// <summary>
     /// Данные профиля хранения данных.

@@ -2,7 +2,7 @@
 using System.Linq;
 using Egsp.Core;
 
-namespace Egsp.CSharp
+namespace Egsp.Core.Components
 {
     public abstract partial class DecoratorBase
     {

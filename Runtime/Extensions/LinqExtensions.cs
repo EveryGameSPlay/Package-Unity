@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Egsp.Core;
 
-namespace Egsp.Extensions.Linq
+namespace Egsp.Core
 {
     public static class LinqExtensions
     {

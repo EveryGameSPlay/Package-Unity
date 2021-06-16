@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Egsp.CSharp
+namespace Egsp.Core.Components
 {
     /// <summary>
     /// Группа компонентов, к которой можно применить одинаковое действие.

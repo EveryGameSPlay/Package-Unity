@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Egsp.Extensions.Graphs
+namespace Egsp.Core
 {
     [Obsolete("Under construction.")][Serializable]
     public class Edge<TVertex>

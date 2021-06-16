@@ -1,20 +1,18 @@
 ﻿using UnityEngine;
 
-namespace Egsp.Extensions.Mono
+namespace Egsp.Core
 {
     public static class CameraExtensions
     {
         /// <param name="worldPosition">Используется в том случае, если камера в режиме перспективы.</param>
         public static Vector2 SizeInWorld(this Camera camera, Vector3 worldPosition = default(Vector3))
         {
+            // ?????????????????????????????? why switch, ok
             switch (camera.orthographic)
             {
                 case true : return SizeInWorldOrtho(camera);
                 case false : return SizeInWorldPerspective(camera, worldPosition);
             }
-            
-            // only for unity exceptions
-            return Vector2.zero;
         }
 
         public static Vector2 SizeInWorldOrtho(this Camera camera)

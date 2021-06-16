@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Egsp.Utils.MeshUtilities
+namespace Egsp.Core.Utils
 {
     public static class MeshUtils
     {

@@ -4,40 +4,8 @@ using UnityEngine;
 using System;
 using Egsp.Core;
 
-namespace Egsp.Extensions.Collections
+namespace Egsp.Core
 {
-    /// <summary>
-    /// Параметры ячеек сетки.
-    /// </summary>
-    public struct CellParams
-    {
-        private static CellParams _one = new CellParams(1,1);
-        
-        public readonly float Width;
-        public readonly float Height;
-
-        public static CellParams One => _one;
-        
-        public CellParams(float width, float height)
-        {
-            Width = width;
-            Height = height;
-        }
-    }
-
-    /// <summary>
-    /// Параметры сетки относительно сцены.
-    /// </summary>
-    public struct Scene
-    {
-        public readonly Vector3 Offset;
-
-        public Scene(Vector3 offset)
-        {
-            Offset = offset;
-        }
-    }
-
     public interface IGridListener<TObject>
     {
         /// <summary>
@@ -73,15 +41,47 @@ namespace Egsp.Extensions.Collections
         /// </summary>
         public int Count => Width * Height;
         
-        public CellParams Cell { get; protected set; } = CellParams.One;
+        public CellParams CellParamsValue { get; protected set; } = CellParams.One;
         
-        public Scene Scene { get; set; } = new Scene(Vector3.zero);
+        public SceneParams SceneParamsValue { get; set; } = new SceneParams(Vector3.zero);
 
         public abstract void WorldToIndex(Vector3 position, out int x, out int y);
 
         public abstract bool InBounds(Vector3 position);
 
         public abstract bool InBounds(int x, int y);
+        
+        /// <summary>
+        /// Параметры ячеек сетки.
+        /// </summary>
+        public struct CellParams
+        {
+            private static CellParams _one = new CellParams(1,1);
+        
+            public readonly float Width;
+            public readonly float Height;
+
+            public static CellParams One => _one;
+        
+            public CellParams(float width, float height)
+            {
+                Width = width;
+                Height = height;
+            }
+        }
+        
+        /// <summary>
+        /// Параметры сетки относительно сцены.
+        /// </summary>
+        public struct SceneParams
+        {
+            public readonly Vector3 Offset;
+
+            public SceneParams(Vector3 offset)
+            {
+                Offset = offset;
+            }
+        }
     }
     
     public class Grid<TObject> : Grid
@@ -105,7 +105,7 @@ namespace Egsp.Extensions.Collections
             this.Width = width;
             this.Height = height;
 
-            Cell = new CellParams(cellWidth, cellHeight);
+            CellParamsValue = new CellParams(cellWidth, cellHeight);
 
             GridList2D = new List<List<TObject>>(Width);
 
@@ -178,10 +178,10 @@ namespace Egsp.Extensions.Collections
         /// </summary>
         public override void WorldToIndex(Vector3 worldPos, out int x, out int y)
         {
-            worldPos -= Scene.Offset;
+            worldPos -= SceneParamsValue.Offset;
             
-            x = Mathf.FloorToInt(worldPos.x / Cell.Width);
-            y = Mathf.FloorToInt(worldPos.y / Cell.Height);
+            x = Mathf.FloorToInt(worldPos.x / CellParamsValue.Width);
+            y = Mathf.FloorToInt(worldPos.y / CellParamsValue.Height);
         }
         
         /// <summary>

@@ -2,7 +2,7 @@
 using Egsp.Core;
 using UnityEngine;
 
-namespace Egsp.Files.Serializers
+namespace Egsp.Core
 {
     /// <summary>
     /// Стандартный сериализатор Unity, использующий JsonUtility.

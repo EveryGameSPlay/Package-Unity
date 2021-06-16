@@ -4,10 +4,9 @@ using UnityEngine;
 
 using System.IO;
 using System.Linq;
-using Egsp.Files.Serializers;
 using JetBrains.Annotations;
 
-namespace Egsp.Files
+namespace Egsp.Core
  {
      /// <summary>
      /// <para>Через данный класс осуществляется доступ к данным вне приложения.

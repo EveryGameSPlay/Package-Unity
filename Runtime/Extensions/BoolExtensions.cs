@@ -1,4 +1,4 @@
-﻿namespace Egsp.Extensions.Primitives
+﻿namespace Egsp.Core
 {
     public static class BoolExtensions
     {

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Egsp.Extensions
+namespace Egsp.Core
 {
     public static class FileSystemExtensions
     {

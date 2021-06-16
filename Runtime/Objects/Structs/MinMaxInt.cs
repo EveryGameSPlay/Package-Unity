@@ -1,5 +1,4 @@
-﻿using Egsp.Extensions.Primitives;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Egsp.Core
 {

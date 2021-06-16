@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Egsp.CSharp
+namespace Egsp.Core.Components
 {
     /// <summary>
     /// Базовый интерфейс всех компонентов.
@@ -73,7 +73,6 @@ namespace Egsp.CSharp
         }
     }
 
-    [Obsolete]
     public interface IInvokableComponent : IComponent
     {
         void Invoke();

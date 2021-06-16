@@ -2,8 +2,6 @@
 using System;
 using System.Linq;
 
-using Egsp.Extensions.Linq;
-
 namespace Egsp.Core.Pathfinding
 {
     /// <summary>

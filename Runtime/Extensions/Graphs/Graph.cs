@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Egsp.Extensions.Graphs
+namespace Egsp.Core
 {
     // Здесь весь функионал работает, но мне не нравится его реализация.
 

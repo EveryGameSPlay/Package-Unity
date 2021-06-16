@@ -1,4 +1,4 @@
-﻿namespace Egsp.Extensions.Collections
+﻿namespace Egsp.Core
 {
     /// <summary>
     /// Объект, который будет использоваться LinkedGrid.

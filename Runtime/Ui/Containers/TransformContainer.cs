@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Egsp.Utils.GameObjectUtilities;
 using UnityEngine;
+using Egsp.Core.Utils;
 
 namespace Egsp.Core
 {

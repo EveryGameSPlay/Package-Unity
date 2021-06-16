@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Egsp.Core.Inputs
+namespace Egsp.Core
 {
     public static class InputExtensions
     {

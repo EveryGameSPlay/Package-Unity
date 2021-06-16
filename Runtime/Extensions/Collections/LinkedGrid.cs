@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Egsp.Extensions.Collections
+namespace Egsp.Core
 {
     // TODO: Вместо использования интерфейса объектов сетки, лучше использовать обертки по типу Node в LinkedList.
     
@@ -146,7 +146,7 @@ namespace Egsp.Extensions.Collections
         {
             var linkedGrid = new LinkedGrid<TLinkable>(grid.Width, grid.Height);
             
-            linkedGrid.Cell = grid.Cell;
+            linkedGrid.CellParamsValue = grid.CellParamsValue;
 
             linkedGrid.GridList2D = new List<List<TLinkable>>(linkedGrid.Width);
             
