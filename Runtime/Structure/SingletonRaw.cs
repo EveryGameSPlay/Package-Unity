@@ -8,6 +8,15 @@ namespace Egsp.Core
     /// </summary>
     public abstract class SingletonRaw<TSingleton> where TSingleton : SingletonRaw<TSingleton>, new()
     {
+        private static TSingleton _instance;
+        
+        public static WeakEvent<TSingleton> OnInstanceCreated = new WeakEvent<TSingleton>();
+        
+        /// <summary>
+        /// Существует ли экземпляр.
+        /// </summary>
+        public static bool Exist => _instance != null;
+        
         [NotNull]
         public static TSingleton Instance
         {
@@ -43,10 +52,6 @@ namespace Egsp.Core
                 return lazyAttribute.AllowLazyInstance;
             }
         }
-        
-        private static TSingleton _instance;
-        
-        public static WeakEvent<TSingleton> OnInstanceCreated = new WeakEvent<TSingleton>();
 
 
         public static void DestroyIfExist()

@@ -8,6 +8,18 @@ namespace Egsp.Core
     /// </summary>
     public abstract class Singleton<TSingleton> : MonoBehaviour where TSingleton : MonoBehaviour
     {
+        private static bool _alwaysExist;
+
+        private static TSingleton _instance;
+        private static GameObject _instanceGameObject;
+        
+        public static WeakEvent<TSingleton> OnInstanceCreated = new WeakEvent<TSingleton>();
+
+        /// <summary>
+        /// Существует ли экземпляр.
+        /// </summary>
+        public static bool Exist => _instance != null;
+    
         public static TSingleton Instance
         {
             get
@@ -65,12 +77,6 @@ namespace Egsp.Core
                     DontDestroyOnLoad(_instance);
             }
         }
-        private static bool _alwaysExist;
-
-        private static TSingleton _instance;
-        private static GameObject _instanceGameObject;
-        
-        public static WeakEvent<TSingleton> OnInstanceCreated = new WeakEvent<TSingleton>();
 
 
         /// <param name="immediate">Уничтожить мгновенно, а не в конце кадра.</param>
