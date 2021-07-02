@@ -11,7 +11,6 @@ namespace Egsp.Core
     /// </summary>
     public abstract class Context : MonoBehaviour, IContext
     {
-        
         private IEventBus _bus = new EventBus();
 
         private IEventBus _detectBus = new EventBus();
