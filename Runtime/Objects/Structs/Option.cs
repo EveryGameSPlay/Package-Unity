@@ -72,6 +72,11 @@ namespace Egsp.Core
                 return IsSome == other.IsSome;
         }
 
+        public override int GetHashCode()
+        {
+            return IsNone ? -1 : _value.GetHashCode();
+        }
+
         public override string ToString()
         {
             return IsSome ? "Some" : "None";

@@ -17,8 +17,10 @@ namespace Egsp.Core
      /// PC - Application.dataPath/Storage/
      /// </para>
      /// </summary>
-     public static class Storage
+     public static partial class Storage
      {
+         private const string CommonProviderName = "Common";
+         
          /// <summary>
          /// Расширение файла для сохраняемых данных
          /// </summary>
@@ -30,16 +32,16 @@ namespace Egsp.Core
          private static string RootFolder;
 
          /// <summary>
-         /// Глобальные данные.
+         /// Общие данные.
          /// </summary>
          [NotNull]
-         public static DataProvider Global { get; private set; }
+         public static DataProvider Common { get; private set; }
          
          /// <summary>
-         /// Данные принадлежащие профилю.
+         /// Данные принадлежащие профилю. Если не было загружено ни одного профиля, то будет использоваться общий.
          /// </summary>
          [NotNull]
-         public static DataProvider Local { get; set; }
+         public static DataProvider Current { get; set; }
 
          /// <summary>
          /// Все существующие профили.
@@ -67,14 +69,14 @@ namespace Egsp.Core
              DefaultSerializer = new UnitySerializer();
 #endif
              
-             Initialize();
+             PrepareDirectories();
              LoadProfiles();
          }
 
-         private static void Initialize()
+         private static void PrepareDirectories()
          {
              // Проверка существования папки с сохранениями
-             if (Directory.Exists(RootFolder))
+             if (!Directory.Exists(RootFolder))
              {
                  // Создание отсутствующей папки с сохранениями
                  Directory.CreateDirectory(RootFolder);
@@ -83,12 +85,12 @@ namespace Egsp.Core
 
          private static void LoadProfiles()
          {
-             var globalProfile = new DataProfile("Global");
-             var globalProvider = new DataProvider(globalProfile, RootFolder, DefaultSerializer, DefaultExtension);
+             var commonProfile = new DataProfile(CommonProviderName);
+             var commonProvider = new DataProvider(commonProfile, RootFolder, DefaultSerializer, DefaultExtension);
 
-             Global = globalProvider;
+             Common = commonProvider;
 
-             var profiles = Global.LoadObjects<DataProfile>("Profiles/profiles");
+             var profiles = Common.GetObjects<DataProfile>("Profiles/profiles");
 
              if (profiles.IsSome)
              {
@@ -97,12 +99,12 @@ namespace Egsp.Core
                  if (list.Count == 0)
                  {
                      _profiles = list;
-                     Local = Global;
+                     Current = Common;
                  }
                  else
                  {
                      var localProfile = _profiles[0];
-                     Local = new DataProvider(localProfile, RootFolder, DefaultSerializer, DefaultExtension);
+                     Current = new DataProvider(localProfile, RootFolder, DefaultSerializer, DefaultExtension);
                  }
              }
              else
@@ -114,13 +116,13 @@ namespace Egsp.Core
              if (!profiles.IsSome || profiles.Value.Count == 0)
              {
                  _profiles = profiles.Value;
-                 Local = Global;
+                 Current = Common;
              }
              else
              {
                  _profiles = profiles.Value;
                  var localProfile = _profiles[0];
-                 Local = new DataProvider(localProfile, RootFolder, DefaultSerializer, DefaultExtension);
+                 Current = new DataProvider(localProfile, RootFolder, DefaultSerializer, DefaultExtension);
              }
          }
 
@@ -137,24 +139,14 @@ namespace Egsp.Core
          /// Установка локального профиля.
          /// Если профиль не будет найдет в списке, то вылетит исключение. 
          /// </summary>
-         public static void SetLocal(DataProfile profile)
+         public static void SwitchCurrentProfile(DataProfile profile)
          {
              if(!_profiles.Contains(profile))
                  throw new Exception($"Profile {profile.Name} not exist in current list of profiles!");
              
-             Local = new DataProvider(profile, RootFolder, new UnitySerializer(), DefaultExtension);
+             Current = new DataProvider(profile, RootFolder, new UnitySerializer(), DefaultExtension);
          }
 
-         /// <summary>
-         /// Получение данных о профиле.
-         /// </summary>
-         /// <returns></returns>
-         public static PropertyFileProxy GetLocalProfileInfo()
-         {
-             var proxy = Local.GetPropertiesFromFile("info");
-             return proxy;
-         }
-         
      }
 }
 

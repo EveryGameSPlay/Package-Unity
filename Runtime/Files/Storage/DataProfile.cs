@@ -7,7 +7,7 @@ namespace Egsp.Core
     /// Ничего серьезного в себе не несет, только имя корневого каталога.
     /// </summary>
     [Serializable]
-    public struct DataProfile
+    public readonly struct DataProfile
     {
         /// <summary>
         /// Имя профиля.

@@ -79,15 +79,15 @@ namespace Egsp.Core
         /// <summary>
         /// Сохраняет любую сущность с помощью сериализации.
         /// </summary>
-        public void SaveObject<T>(T entity, string file)
+        public void SetObject<T>(T entity, string file)
         {
             var path = CombineFilePath(file);
             Directory.CreateDirectory(Path.GetDirectoryName(path) ?? throw new InvalidOperationException());
 
-            SaveObjectInternal(entity, path);
+            SetObjectInternal(entity, path);
         }
 
-        private void SaveObjectInternal<T>(T entity, string path)
+        private void SetObjectInternal<T>(T entity, string path)
         {
             var data = Serializer.Serialize(entity);
 
@@ -102,12 +102,12 @@ namespace Egsp.Core
         /// <summary>
         /// Загружает любую сущность с помощью десериализации.
         /// </summary>
-        public T LoadObject<T>(string file)
+        public Option<T> GetObject<T>(string file)
         {
             var path = CombineFilePath(file);
 
             if (!File.Exists(path))
-                return default(T);
+                return Option<T>.None;
 
             var data = File.ReadAllBytes(path);
 
@@ -116,7 +116,7 @@ namespace Egsp.Core
             return entity.Value;
         }
 
-        public void SaveObjects<T>(string file, IEnumerable<T> entities)
+        public void SetObjects<T>(string file, IEnumerable<T> entities)
         {
             var path = CombineFilePath(file);
             Directory.CreateDirectory(Path.GetDirectoryName(path) ?? throw new InvalidOperationException());
@@ -133,7 +133,7 @@ namespace Egsp.Core
         /// <summary>
         /// Загружает все сущности и игнорирует несериализованные значения.
         /// </summary>
-        public Option<List<T>> LoadObjects<T>(string file)
+        public Option<List<T>> GetObjects<T>(string file)
         {
             var path = CombineFilePath(file);
             if (!File.Exists(path))
@@ -150,7 +150,7 @@ namespace Egsp.Core
             return list;
         }
 
-        public void SaveObjectsByFiles<T>(string directory, IEnumerable<T> entities, Func<T, string> fileName,
+        public void SetObjectsToFiles<T>(string directory, IEnumerable<T> entities, Func<T, string> fileName,
             string fileExtension = null)
         {
             if (string.IsNullOrWhiteSpace(fileExtension))
@@ -164,11 +164,11 @@ namespace Egsp.Core
             foreach (var entity in entities)
             {
                 var path = dpForFile + fileName(entity) + fileExtension;
-                SaveObjectInternal(entity, path);
+                SetObjectInternal(entity, path);
             }
         }
 
-        public LinkedList<T> LoadObjectsFromDirectory<T>(string directory, string fileFilter = "*.txt")
+        public LinkedList<T> GetObjectsFromDirectory<T>(string directory, string fileFilter = "*.txt")
         {
             var directoryPath = CombineDirectoryPath(directory);
             Directory.CreateDirectory(directoryPath ?? throw new InvalidOperationException());
