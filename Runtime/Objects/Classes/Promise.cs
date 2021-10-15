@@ -29,7 +29,7 @@ namespace Egsp.Core
                 _result = value;
                 State = PromiseState.Result;
                 
-                OnResult(_result.Value);
+                OnResult(_result.Object);
                 
                 ClearAllSubscribers();
             }
@@ -45,7 +45,7 @@ namespace Egsp.Core
                 _fail = value;
                 State = PromiseState.Fail;
                 
-                OnFail(_fail.Value);
+                OnFail(_fail.Object);
                 
                 ClearAllSubscribers();
             }
@@ -56,7 +56,7 @@ namespace Egsp.Core
             OnResult += resultAction;
 
             if (_result.IsSome)
-                InvokeResult(_result.Value);
+                InvokeResult(_result.Object);
         }
 
         public void GetFail(Action<F> failAction)
@@ -64,7 +64,7 @@ namespace Egsp.Core
             OnFail += failAction;
 
             if (_fail.IsSome)
-                InvokeFail(_fail.Value);
+                InvokeFail(_fail.Object);
         }
         
         protected void InvokeResult(in R result)

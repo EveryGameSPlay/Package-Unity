@@ -4,15 +4,15 @@ using UnityEngine.SceneManagement;
 
 namespace Egsp.Core
 {
+    public enum SceneExistInBuildResult
+    {
+        Exist,
+        NotExist,
+        IncorrectName
+    }
+    
     public sealed partial class GameSceneManager
     {
-        public enum SceneExistInBuildResult
-        {
-            Exist,
-            NotExist,
-            IncorrectName
-        }
-        
         public static SceneExistInBuildResult SceneExistInBuild(string name)
         {
             if (string.IsNullOrWhiteSpace(name))

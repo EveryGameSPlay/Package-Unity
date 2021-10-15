@@ -42,7 +42,7 @@ namespace Egsp.Core
 
             if (_cachedValue.IsSome && RaiseLateSubscribers)
             {
-                del.Invoke(_cachedValue.Value);
+                del.Invoke(_cachedValue.Object);
             }
         }
 

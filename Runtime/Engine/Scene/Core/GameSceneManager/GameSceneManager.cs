@@ -58,7 +58,7 @@ namespace Egsp.Core
                 loadProxy = LoadSceneAdditive(sceneName, true);
 
             if (loadProxy.IsSome)
-                loadProxy.Value.AddComponent(actions);
+                loadProxy.Object.AddComponent(actions);
         }
 
         /// <summary>

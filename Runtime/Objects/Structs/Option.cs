@@ -21,40 +21,39 @@ namespace Egsp.Core
         private static Option<TValue> _none = new Option<TValue>();
         public static ref readonly Option<TValue> None => ref _none;
 
+        private readonly TValue _object;
+        
         /// <summary>
         /// Имеется ли значение.
         /// </summary>
         public readonly bool IsSome;
-        
-        private readonly TValue _value;
 
+        /// <summary>
+        /// Отсутствует ли значение.
+        /// </summary>
         public bool IsNone => !IsSome;
-        
-        public TValue Value
+
+        public TValue Object => _object;
+
+        public Option(TValue @object)
         {
-            get
-            {
-                if (IsSome)
-                    return _value;
-                else
-                    throw new OptionNoneValueAccessException();
-            }
+            _object = @object;
+            IsSome = @object != null;
         }
 
-        public Option(TValue value)
+        public static implicit operator TValue(Option<TValue> option)
         {
-            _value = value;
-            IsSome = value != null;
-        }
-
-        public static explicit operator TValue(Option<TValue> optional)
-        {
-            return optional.Value;
+            return option.Object;
         }
         
         public static implicit operator Option<TValue>(TValue value)
         {
             return new Option<TValue>(value);
+        }
+
+        public static implicit operator bool(Option<TValue> option)
+        {
+            return option.IsSome;
         }
 
         public override bool Equals(object obj)
@@ -67,14 +66,14 @@ namespace Egsp.Core
         public bool Equals(Option<TValue> other)
         {
             if (IsSome && other.IsSome)
-                return object.Equals(_value, other._value);
+                return object.Equals(_object, other._object);
             else
                 return IsSome == other.IsSome;
         }
 
         public override int GetHashCode()
         {
-            return IsNone ? -1 : _value.GetHashCode();
+            return IsNone ? -1 : _object.GetHashCode();
         }
 
         public override string ToString()

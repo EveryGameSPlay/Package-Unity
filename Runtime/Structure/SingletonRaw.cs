@@ -35,6 +35,8 @@ namespace Egsp.Core
             protected set => _instance = value;
         }
 
+        protected virtual bool CanBeDestroyedOutside => true;
+
         /// <summary>
         /// Разрешена ли инициализация при обращении к экземпляру.
         /// </summary>
@@ -54,25 +56,33 @@ namespace Egsp.Core
         }
 
 
-        public static void DestroyIfExist()
+        public static bool DestroyIfExist()
         {
             if (_instance != null)
             {
+                if (!_instance.CanBeDestroyedOutside)
+                    return false;
+                
                 _instance.Dispose();
                 _instance = null;
+
+                return true;
             }
+
+            return true;
         }
 
         public static TSingleton CreateInstance()
         {
-            DestroyIfExist();
+            if (!DestroyIfExist())
+                return _instance;
             
-            CreateInstanceSafely();
+            CreateInstanceInternal();
 
             return _instance;
         }
         
-        private static void CreateInstanceSafely()
+        protected static void CreateInstanceInternal()
         {
             _instance = new TSingleton();
             _instance.OnInstanceCreatedInternal();
