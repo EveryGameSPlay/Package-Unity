@@ -11,8 +11,8 @@
     "email": "gasanov.kirill.dev@gmail.com",
     "url": "https://github.com/EveryGameSPlay"
   },
-  "dependencies": {
-    "egsp.unity.types" : "https://github.com/EveryGameSPlay/Package-Unity-Types"
+  "gitDependencies": {
+    "egsp.unity.types" : "https://github.com/EveryGameSPlay/Package-Unity-Types.git#v1.0.0"
   },
   "unity": "2017.1"
 }
