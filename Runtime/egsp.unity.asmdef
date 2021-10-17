@@ -1,7 +1,8 @@
 {
-    "name": "Egsp.Core",
-    "rootNamespace": "",
+    "name": "egsp.unity",
+    "rootNamespace": "Egsp.Core",
     "references": [
+        "egsp.unity.types",
         ""
     ],
     "includePlatforms": [],
