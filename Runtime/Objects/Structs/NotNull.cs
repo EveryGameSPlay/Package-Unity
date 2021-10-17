@@ -6,6 +6,7 @@ namespace Egsp.Core
     /// <para>При отсутствующем значении вызывает исключение на этапе создания экземпляра.</para>
     /// <para>Пустой конструктор нельзя использовать!</para>
     /// </summary>
+    [Obsolete]
     public struct NotNull<TValue> where TValue : class
     {
         /// <summary>

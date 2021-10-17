@@ -15,7 +15,10 @@ namespace Egsp.Core
             Max = (int)Mathf.Abs(max);
 
             if ((Max - Min) < float.Epsilon)
-                Max += 1;
+            {
+                Min = int.MinValue;
+                Max = int.MaxValue;
+            }
         }
 
         public float Normalize(int value)

@@ -33,6 +33,9 @@ namespace Egsp.Core
         /// </summary>
         public bool IsNone => !IsSome;
 
+        /// <summary>
+        /// Вложенное значение.
+        /// </summary>
         public TValue option => _option;
 
         public Option(TValue option)
@@ -65,24 +68,20 @@ namespace Egsp.Core
         }
         public bool Equals(Option<TValue> other)
         {
-            if (IsSome && other.IsSome)
+            if (this.IsSome && other.IsSome)
                 return object.Equals(_option, other._option);
             else
-                return IsSome == other.IsSome;
+                return IsNone == other.IsNone;
         }
 
         public override int GetHashCode()
         {
-            return IsNone ? -1 : _option.GetHashCode();
+            return !this ? -1 : _option.GetHashCode();
         }
 
         public override string ToString()
         {
-            return IsSome ? "Some" : "None";
-        }
-
-        public class OptionNoneValueAccessException : Exception
-        {
+            return this ? $"Some: {option.ToString()}" : "None";
         }
     }
 }

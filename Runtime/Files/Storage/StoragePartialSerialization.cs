@@ -2,10 +2,13 @@
 {
     public static partial class Storage
     {
-        public static void SwitchSerializer(NotNull<ISerializer> serializer)
+        public static void SwitchSerializer(Option<ISerializer> serializer)
         {
-            Common.Serializer = serializer.Value;
-            Current.Serializer = serializer.Value;
+            if (!serializer)
+                return;
+            
+            Common.Serializer = serializer.option;
+            Current.Serializer = serializer.option;
         }
     }
 }

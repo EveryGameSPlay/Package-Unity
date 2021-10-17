@@ -2,12 +2,14 @@
 
 namespace Egsp.Core
 {
+    
     /// <summary>
     /// Объект-результат выполнения операции.
     /// Нужен для более мягкой обработки исключений.
     /// Может быть в двух состояниях: корректном и с ошибкой.
     /// Применение: получение состояния выполнения процедуры.
     /// </summary>
+    [Obsolete]
     public readonly struct Operation
     {
         public readonly OperationResultType Type;
@@ -39,6 +41,7 @@ namespace Egsp.Core
     /// Может быть в двух состояниях: корректном и с ошибкой.
     /// Применение: получение состояния выполнения процедуры.
     /// </summary>
+    [Obsolete]
     public readonly struct Operation<TResult>
     {
         public readonly OperationResultType Type;
@@ -77,12 +80,14 @@ namespace Egsp.Core
         }
     }
     
+    
     /// <summary>
     /// Объект-результат выполнения операции.
     /// Нужен для более мягкой обработки исключений.
     /// Может быть в двух состояниях: корректном и с ошибкой.
     /// Применение: получение состояния выполнения процедуры.
     /// </summary>
+    [Obsolete]
     public readonly struct Operation<TResult, TError> 
     {
         public readonly OperationResultType Type;
