@@ -36,7 +36,7 @@ namespace Egsp.Core
         }
 
         // Если цель будет не статичной и не будет существовать, то произойдет ошибка доступа к значению.
-        public object Target => _isStaticTarget ? null : TargetValue.Object;
+        public object Target => _isStaticTarget ? null : TargetValue.option;
 
         /// <summary>
         /// Можно передать и делегат со статичной целью, конструктор сам проверит на отсутствие Target.

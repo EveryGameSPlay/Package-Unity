@@ -21,7 +21,7 @@ namespace Egsp.Core
         private static Option<TValue> _none = new Option<TValue>();
         public static ref readonly Option<TValue> None => ref _none;
 
-        private readonly TValue _object;
+        private readonly TValue _option;
         
         /// <summary>
         /// Имеется ли значение.
@@ -33,17 +33,17 @@ namespace Egsp.Core
         /// </summary>
         public bool IsNone => !IsSome;
 
-        public TValue Object => _object;
+        public TValue option => _option;
 
-        public Option(TValue @object)
+        public Option(TValue option)
         {
-            _object = @object;
-            IsSome = @object != null;
+            _option = option;
+            IsSome = option != null;
         }
 
         public static implicit operator TValue(Option<TValue> option)
         {
-            return option.Object;
+            return option.option;
         }
         
         public static implicit operator Option<TValue>(TValue value)
@@ -66,14 +66,14 @@ namespace Egsp.Core
         public bool Equals(Option<TValue> other)
         {
             if (IsSome && other.IsSome)
-                return object.Equals(_object, other._object);
+                return object.Equals(_option, other._option);
             else
                 return IsSome == other.IsSome;
         }
 
         public override int GetHashCode()
         {
-            return IsNone ? -1 : _object.GetHashCode();
+            return IsNone ? -1 : _option.GetHashCode();
         }
 
         public override string ToString()

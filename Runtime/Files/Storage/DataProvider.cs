@@ -113,7 +113,7 @@ namespace Egsp.Core
 
             var entity = Serializer.Deserialize<T>(data);
 
-            return entity.Object;
+            return entity.option;
         }
 
         public void SetObjects<T>(string file, IEnumerable<T> entities)
@@ -143,7 +143,7 @@ namespace Egsp.Core
             var sr = new BinaryReader(fs);
 
             var list = Serializer.Deserialize<List<T>>(sr.ReadBytes(int.MaxValue));
-            if(list.Object == null)
+            if(list.option == null)
                 list = Option<List<T>>.None;
             
             fs.Close();
@@ -183,10 +183,10 @@ namespace Egsp.Core
                 var bytes = File.ReadAllBytes(file);
                 var obj = Serializer.Deserialize<T>(bytes);
                 
-                if(!obj.IsSome || obj.Object == null)
+                if(!obj.IsSome || obj.option == null)
                     continue;
 
-                linkedList.AddLast(obj.Object);
+                linkedList.AddLast(obj.option);
             }
 
             return linkedList;

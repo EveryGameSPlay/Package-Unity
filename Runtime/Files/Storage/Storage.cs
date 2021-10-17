@@ -94,7 +94,7 @@ namespace Egsp.Core
 
              if (profiles.IsSome)
              {
-                 var list = profiles.Object;
+                 var list = profiles.option;
 
                  if (list.Count == 0)
                  {
@@ -113,14 +113,14 @@ namespace Egsp.Core
              }
              
              // Если локальный профиль не найден, то он будет ссылаться на глобальный профиль
-             if (!profiles.IsSome || profiles.Object.Count == 0)
+             if (!profiles.IsSome || profiles.option.Count == 0)
              {
-                 _profiles = profiles.Object;
+                 _profiles = profiles.option;
                  Current = Common;
              }
              else
              {
-                 _profiles = profiles.Object;
+                 _profiles = profiles.option;
                  var localProfile = _profiles[0];
                  Current = new DataProvider(localProfile, RootFolder, DefaultSerializer, DefaultExtension);
              }
