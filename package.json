@@ -1,7 +1,7 @@
 {
-  "name": "egsp.core",
-  "version": "1.0.0",
-  "displayName": "Egsp Core Package",
+  "name": "egsp.unity",
+  "version": "2.0.0",
+  "displayName": "Egsp Unity",
   "description": "Unity workflow extension library.",
   "keywords": [
     "library, utility"
@@ -10,6 +10,9 @@
     "name": "Kirill Gasanov",
     "email": "gasanov.kirill.dev@gmail.com",
     "url": "https://github.com/EveryGameSPlay"
+  },
+  "dependencies": {
+    "egsp.unity.types" : "https://github.com/EveryGameSPlay/Package-Unity-Types"
   },
   "unity": "2017.1"
 }
