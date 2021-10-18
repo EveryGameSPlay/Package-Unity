@@ -54,11 +54,11 @@ namespace Egsp.Core
 
             if (IsClosure(del))
             {
-                _closureSubscribers.Remove(x => x.DelAndHookEqual(closureHook, del));
+                _closureSubscribers.RemoveAll(x => x.DelAndHookEqual(closureHook, del));
             }
             else
             {
-                _subscribers.Remove(x => x.DelEqual(del));
+                _subscribers.RemoveAll(x => x.DelEqual(del));
             }
         }
 

@@ -78,7 +78,7 @@ namespace Egsp.Core
             }
 
             // Выборка случайного объекта, которому увеличиваем вес.
-            var randomPicked = source.RandomBySeed();
+            var randomPicked = source.Random();
             randomPicked.Weight += step;
             
             // if(randomPicked == balanceItem)

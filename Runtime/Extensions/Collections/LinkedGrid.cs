@@ -141,8 +141,7 @@ namespace Egsp.Core
         /// <summary>
         /// Создает новую связную сетку на основе обычной
         /// </summary>
-        public static LinkedGrid<TLinkable> ToLinkedGrid<TLinkable>(Grid<TLinkable> grid)
-            where TLinkable : class, IGridLinkable<TLinkable>
+        public static LinkedGrid<TLinkable> ToLinkedGrid(Grid<TLinkable> grid)
         {
             var linkedGrid = new LinkedGrid<TLinkable>(grid.Width, grid.Height);
             

@@ -29,7 +29,7 @@ namespace Egsp.Core
             if (value <= Min)
                 return 0;
 
-            return value.ToNormalized(Min, Max);
+            return value.Normalize(Min, Max);
         }
     }
 }

@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace Egsp.Core.Pathfinding.NonAlloc
 {
-    // Структура пути теперь не должна занимать места в куче отдельным объектом, т.к. будет находиться внутри Response
+    // Структура пути теперь не занимает места в куче отдельным объектом, т.к. будет находиться внутри Response
     public struct Path<TPoint>
     {
         public static Path<TPoint> EmptyPath = new Path<TPoint>();
